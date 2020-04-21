@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ShaipAgency.Data
 {
-    public class WeatherForecastService
+    public class WeatherapplicationUserservice
     {
         private static readonly string[] Summaries = new[]
         {
