@@ -16,3 +16,20 @@
 - ShaipNameIndex 추가(수동)
 - UserId 타입수정(int), 자동증가 CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY CLUSTERED ([Id] ASC)
 - UserId 연관 DB 타입 수정
+
+## 02_회원정보출력_예제추가
+- 회원정보 출력 예제 페이지 추가
+
+### DB Communication 
+- IApplicationUserRepository 선언
+- ApplicationDbContext DBset설정
+- ApplicationUserRepository 구현
+
+### Demo Page 추가
+- Users Blazor Page추가
+- 메뉴추가
+
+- spinner추가 (loding)
+- site.css
+- import Shaip.css
+- Nuget설치 : DevExpress.Blazor
