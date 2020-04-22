@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShaipAgency", "ShaipAgency\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevExpress.Blazor.DocumentMetadata", "..\Shaip\DevExpress.Blazor.DocumentMetadata\DevExpress.Blazor.DocumentMetadata.csproj", "{8C907407-4BDE-4114-AF1B-D4E84230E322}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDemo.ServerSide", "..\Shaip\BlazorDemo.ServerSide\BlazorDemo.ServerSide.csproj", "{BA5168C2-FBCD-4934-AB14-C0B4AA568D59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8C907407-4BDE-4114-AF1B-D4E84230E322}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C907407-4BDE-4114-AF1B-D4E84230E322}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C907407-4BDE-4114-AF1B-D4E84230E322}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA5168C2-FBCD-4934-AB14-C0B4AA568D59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA5168C2-FBCD-4934-AB14-C0B4AA568D59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA5168C2-FBCD-4934-AB14-C0B4AA568D59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA5168C2-FBCD-4934-AB14-C0B4AA568D59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

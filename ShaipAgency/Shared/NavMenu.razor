@@ -56,7 +56,22 @@
             BeforeExpand="@BeforeExpand"
             SelectionChanged="@SelectionChanged">
     <Nodes>
-        <DxTreeViewNode Text="Overview" NavigateUrl="">
+        <DxTreeViewNode Text="Home" NavigateUrl="">
+        </DxTreeViewNode>
+        <DxTreeViewNode Text="서비스소개" NavigateUrl="">
+        </DxTreeViewNode>
+        <DxTreeViewNode Text="서비스신청" NavigateUrl="">
+        </DxTreeViewNode>
+        <DxTreeViewNode Text="부가서비스" NavigateUrl="">
+        </DxTreeViewNode>
+        <DxTreeViewNode Text="테스트페이지">
+            <Nodes>
+                <DxTreeViewNode Text="Fetch Data" NavigateUrl="fetchdata"></DxTreeViewNode>
+                <DxTreeViewNode Text="Test Component" NavigateUrl="TestComponent"></DxTreeViewNode>
+                <DxTreeViewNode Text="User List" NavigateUrl="Users"></DxTreeViewNode>
+            </Nodes>
+        </DxTreeViewNode>
+        <DxTreeViewNode Text="Overview" NavigateUrl="/DevExpressDemo/Overview">
         </DxTreeViewNode>
         <DxTreeViewNode Text="Data Grid">
             <Nodes>
