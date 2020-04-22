@@ -1,4 +1,9 @@
 ﻿
+app{
+    font-family:"HDharmony B"  !important
+}
+
+
 /* Index 페이지 */
 .index-pannel-icon
 {
@@ -35,6 +40,7 @@
 }
 
 
+/* Logo 이미지*/
 .sidebar > .logo-container {
     display: flex;
     justify-content: space-between;
@@ -72,4 +78,32 @@ div.logo {
     padding-top: 10px;
     float: left;
     width: 100%;
+}
+
+
+/* LoginDisplay */
+.sign-top-row {
+    display: flex;
+    align-items: center;
+    /*justify-content: flex-end;*/
+}
+
+.sign-top-row {
+    position: sticky;
+    top: 0;
+}
+
+.sign-top-row > a, form {
+    white-space: nowrap;
+    margin-left: 1.0rem;
+}
+
+.sign-top-row a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.sign-top-row.auth {
+    justify-content: space-between;
 }

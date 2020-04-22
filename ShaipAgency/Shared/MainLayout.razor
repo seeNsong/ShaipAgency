@@ -32,6 +32,9 @@
         @*<a class="download-btn navbar-toggler d-inline-block bg-primary text-white border-0" href="https://nuget.devexpress.com/" target="_blank" title="Obtain your NuGet feed URL">
             <span class="demo-download-icon"></span>
         </a>*@
+        <div class="sign-top-row px-4 auth" >
+            <LoginDisplay />
+        </div>
         <div class="@($"bg-light text-dark d-inline-block theme-settings { ThemeSwitcherShown }")">
             <a class="nav-item nav-link" @onclick="@ToggleThemeSwitcherPanel" href="javascript:void(0);">
                 <span class="demo-theme-icon"></span>

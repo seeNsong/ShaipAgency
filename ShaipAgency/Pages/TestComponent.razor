@@ -1,10 +1,18 @@
 ﻿@page "/TestComponent"
 
-@attribute [Authorize]
 
-<h3>TestComponent</h3>
-<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
 
-@code {
 
-}
+
+
+
+<AuthorizeView>
+    <Authorized>
+        <h3>TestComponent</h3>
+        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+    </Authorized>
+    <NotAuthorized>
+        <h3>NotAuthorized</h3> TestComponent
+    </NotAuthorized>
+</AuthorizeView>
+

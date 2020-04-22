@@ -54,7 +54,7 @@ namespace Demo.Blazor {
 
 
                 .StyleSheet("site-css", "~/css/site.css")
-                .StyleSheet("Shaip-css", "~/css/Shaip.css")
+                .StyleSheet("shaip-css", "~/css/shaip.css")
                 .StyleSheet("highlight-css", "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css")
                 .StyleSheet("demo-css", "~/css/dx-demo.css")
                 .StyleSheet("scroll-view", "~/css/scroll-view.css")
