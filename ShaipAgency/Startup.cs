@@ -16,6 +16,9 @@ using Microsoft.Extensions.Hosting;
 using ShaipAgency.Areas.Identity;
 using ShaipAgency.Data;
 using ShaipAgency.Model;
+using DevExpress.Blazor.DocumentMetadata;
+using Demo.Blazor;
+using Microsoft.Extensions.Options;
 
 namespace ShaipAgency
 {
@@ -43,6 +46,13 @@ namespace ShaipAgency
             services.AddSingleton<WeatherapplicationUserservice>();
 
             services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
+
+            services.AddDocumentMetadata((serviceProvider, registrator) => {
+                DemoConfiguration config = serviceProvider.GetService<IOptions<DemoConfiguration>>().Value;
+                config.RegisterPagesMetadata(registrator);
+            });
+
+            services.AddDevExpressBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
