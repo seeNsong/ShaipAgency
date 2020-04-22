@@ -141,7 +141,7 @@ code.hljs.xml {
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.12);
 }
 
-.sidebar > .logo-container {
+/*.sidebar > .logo-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -177,7 +177,7 @@ div.logo {
     padding-top: 10px;
     float: left;
     width: 100%;
-}
+}*/
 
 .caption {
     color: #212529;

@@ -6,7 +6,7 @@ app {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: inherit;
+    background-color: inherit;    
 }
 
 .top-row {
@@ -48,6 +48,7 @@ app {
 
 .main {
     flex: 1;
+    
 }
 
 .sidebar {
