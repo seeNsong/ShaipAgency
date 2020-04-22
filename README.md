@@ -33,3 +33,7 @@
 - site.css
 - import Shaip.css
 - Nuget설치 : DevExpress.Blazor
+
+## 03_Theme변경_DevExpressDemoTheme
+- wwwroot 파일 백업 -> BlazorTemplatesOrigin
+- DevExpress 테마 적용 
