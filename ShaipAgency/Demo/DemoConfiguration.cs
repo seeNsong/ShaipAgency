@@ -54,10 +54,12 @@ namespace Demo.Blazor {
 
 
                 .StyleSheet("site-css", "~/css/site.css")
+                .StyleSheet("Shaip-css", "~/css/Shaip.css")
                 .StyleSheet("highlight-css", "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css")
                 .StyleSheet("demo-css", "~/css/dx-demo.css")
                 .StyleSheet("scroll-view", "~/css/scroll-view.css")
                 .StyleSheet("dx-css", "~/_content/DevExpress.Blazor/dx-blazor.css")
+                
                 .StyleSheet(
                     name: "currentTheme",
                     styleSheetUrl: "css/switcher-resources/themes/blazing berry/bootstrap.min.css"
