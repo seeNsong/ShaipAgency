@@ -10,8 +10,8 @@ using ShaipAgency.Data;
 namespace ShaipAgency.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200421200055_CreateApplicationUser")]
-    partial class CreateApplicationUser
+    [Migration("20200424041741_applicationuser")]
+    partial class applicationuser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

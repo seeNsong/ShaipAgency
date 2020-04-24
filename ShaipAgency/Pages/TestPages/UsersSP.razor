@@ -1,13 +1,13 @@
 ﻿@page "/Test/UsersSP"
 @inject IApplicationUserRepository ApplicationUserRepository
-@inject ITestModelRepository TestModelRepository
+@inject ITestModelService TestModelService
 @*DevExpress Modal 예제*@
 @using System
 @using System.ComponentModel.DataAnnotations
 @using DevExpress.Blazor
 
 
-@*@if (applicationUsers == null)
+@if (applicationUsers == null)
 {
     <p><em>Loding...</em></p>
     <div class="spinner-border" />
@@ -36,7 +36,7 @@ else
             }
         </tbody>
     </table>
-}*@
+}
 
 
 <h2>Stored Procedure 사용</h2>
@@ -163,7 +163,7 @@ else
     {
         await Task.Delay(500);
         applicationUsers = await ApplicationUserRepository.GetApplicationUsers();
-        testModels = await TestModelRepository.GetTestModelsBySPAsync();
+        testModels = await TestModelService.GetTestModelsBySPAsync();
 
     }
 

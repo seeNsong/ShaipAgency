@@ -1,6 +1,6 @@
 ﻿@page "/Test/Users"
 @inject IApplicationUserRepository ApplicationUserRepository
-@inject ITestModelRepository TestModelRepository
+@inject ITestModelService TestModelService
 @*DevExpress Modal 예제*@
 @using System
 @using System.ComponentModel.DataAnnotations
@@ -155,13 +155,15 @@ else
 
     private IList<ApplicationUser> applicationUsers;
     private List<TestModel> testModels;
-    private List<TestModel> testModels2;
+    
 
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(500);
         applicationUsers = await ApplicationUserRepository.GetApplicationUsers();
-        testModels = await TestModelRepository.GetTestModelsByQueryAsync();
+
+
+        testModels = await TestModelService.GetTestModelsByQueryAsync();
 
     }
 

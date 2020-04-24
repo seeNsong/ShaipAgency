@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using ShaipAgency.Model.TestModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using ShaipAgency.Model.TestModel;
 
 namespace ShaipAgency.Data.Test
 {
-    public interface ITestModelRepository
+    public interface ITestModelService
     {
         Task<List<TestModel>> GetTestModelsByQueryAsync();
         Task<List<TestModel>> GetTestModelsBySPAsync();
+
     }
 }

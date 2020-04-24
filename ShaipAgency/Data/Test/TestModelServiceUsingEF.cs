@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.SqlClient;
 using System.Data;
+using Microsoft.Data.SqlClient;         
+
 
 namespace ShaipAgency.Data.Test
 {
-    public class TestModelRepository : ITestModelRepository
+    public class TestModelServiceUsingEF : ITestModelService
     {
         private readonly ApplicationDbContext _context;
 
-        public TestModelRepository(ApplicationDbContext context)
+        public TestModelServiceUsingEF(ApplicationDbContext context)
         {
             _context = context;
 
@@ -29,7 +30,7 @@ namespace ShaipAgency.Data.Test
                 await conn.OpenAsync();
                 using (var command = conn.CreateCommand())
                 {                                        
-                    string query = "SELECT ApplyNo, Charge, DateTime, ShaipName From UserPassbook WITH(NOLOCK)";
+                    string query = "SELECT ApplyNo, Charge, ShaipName, DateTime From UserPassbook WITH(NOLOCK)";
                     command.CommandText = query;
 
                     DbDataReader reader = await command.ExecuteReaderAsync();
@@ -38,7 +39,7 @@ namespace ShaipAgency.Data.Test
                     {
                         while (await reader.ReadAsync())
                         {
-                            var row = new TestModel { ApplyNo = reader.GetString(0), Charge = reader.GetInt32(1), DateTime = reader.GetDateTime(2), ShaipName=reader.GetString(3) };
+                            var row = new TestModel { ApplyNo = reader.GetString(0), Charge = reader.GetInt32(1), ShaipName = reader.GetString(2), DateTime = reader.GetDateTime(3) };
                             testModels.Add(row);
                         }
                     }
@@ -47,8 +48,10 @@ namespace ShaipAgency.Data.Test
             }
             finally
             {
+
                 conn.Close();
-                conn.Dispose();
+                //conn.Dispose();
+
             }
             return testModels;            
         }
@@ -64,7 +67,7 @@ namespace ShaipAgency.Data.Test
                 await conn2.OpenAsync();
                 using (var command = conn2.CreateCommand())
                 {
-                    string query = "User_Passbook_Sel_01";
+                    string query = "UserPassbook_Sel_01";
                     var param = new SqlParameter("@ShaipName", SqlDbType.NVarChar);
                     param.Value = "김성민";
 
@@ -80,7 +83,7 @@ namespace ShaipAgency.Data.Test
                     {
                         while (await reader.ReadAsync())
                         {
-                            var row = new TestModel { ApplyNo = reader.GetString(0), Charge = reader.GetInt32(1), DateTime = reader.GetDateTime(2), ShaipName = reader.GetString(3) };
+                            var row = new TestModel { ApplyNo = reader.GetString(0), Charge = reader.GetInt32(1), ShaipName = reader.GetString(2), DateTime = reader.GetDateTime(3) };
                             testModels.Add(row);
                         }
                     }
@@ -90,7 +93,8 @@ namespace ShaipAgency.Data.Test
             finally
             {
                 conn2.Close();
-                conn2.Dispose();
+                //conn2.Dispose();          // EF는 
+
             }
             return testModels;
         }

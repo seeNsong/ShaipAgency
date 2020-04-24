@@ -41,10 +41,10 @@ namespace ShaipAgency
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("ProjectConnection")));
             services.AddDbContext<TestDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("ProjectConnection")));
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
@@ -53,7 +53,7 @@ namespace ShaipAgency
             services.AddSingleton<WeatherapplicationUserservice>();
 
             services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
-            services.AddTransient<ITestModelRepository, TestModelRepository>();
+            services.AddTransient<ITestModelService, TestModelServiceDirectAccessDb>();
 
             services.AddDocumentMetadata((serviceProvider, registrator) => {
                 DemoConfiguration config = serviceProvider.GetService<IOptions<DemoConfiguration>>().Value;

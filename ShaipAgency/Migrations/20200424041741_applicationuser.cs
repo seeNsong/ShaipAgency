@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ShaipAgency.Migrations
 {
-    public partial class CreateApplicationUser : Migration
+    public partial class applicationuser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
