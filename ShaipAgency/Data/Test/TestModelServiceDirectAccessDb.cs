@@ -25,7 +25,7 @@ namespace ShaipAgency.Data.Test
 
             try
             {
-                using ( SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("LocalDbConnection")))
+                using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("LocalDbConnection")))
                 {
                     await conn.OpenAsync();
                     using (SqlCommand command = new SqlCommand("SELECT ApplyNo, ShaipName, Charge, CDateTime From UserPassbook WITH(NOLOCK)", conn))
@@ -38,14 +38,14 @@ namespace ShaipAgency.Data.Test
                                 testModels.Add(row);
                             }
                         }
-                    }                    
+                    }
                 }
             }
             catch (SqlException e)
             {
                 Console.WriteLine(e.Message);
-            }            
-            
+            }
+
 
             return testModels;
         }
@@ -61,7 +61,7 @@ namespace ShaipAgency.Data.Test
                 {
                     await conn.OpenAsync();
 
-                    using (SqlCommand command = new SqlCommand("",conn))
+                    using (SqlCommand command = new SqlCommand("", conn))
                     {
 
                         string query = "UserPassbook_Sel_01";
@@ -83,7 +83,7 @@ namespace ShaipAgency.Data.Test
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -91,9 +91,6 @@ namespace ShaipAgency.Data.Test
             return testModels;
 
         }
-
-
-        public async void 
 
     }
 }
