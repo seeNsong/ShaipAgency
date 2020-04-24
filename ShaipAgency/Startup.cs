@@ -41,10 +41,10 @@ namespace ShaipAgency
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("ProjectConnection")));
+                    Configuration.GetConnectionString("LocalDbConnection")));
             services.AddDbContext<TestDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("ProjectConnection")));
+                    Configuration.GetConnectionString("LocalDbConnection")));
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();

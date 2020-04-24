@@ -3,16 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>ShaipAgency.SqlDatabase</Name>
+    <Name>ShaipAgency.MSSQLDB</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{82374a36-e8eb-4aca-b32c-da48c61ec0be}</ProjectGuid>
+    <ProjectGuid>{0097b838-ba94-43c3-a683-e00c9166b5eb}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>ShaipAgency.SqlDatabase</RootNamespace>
-    <AssemblyName>ShaipAgency.SqlDatabase</AssemblyName>
+    <RootNamespace>ShaipAgency.MSSQLDB</RootNamespace>
+    <AssemblyName>ShaipAgency.MSSQLDB</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -56,5 +56,23 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="PublishLocations" />
+    <Folder Include="PostPublishScripts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\UserPassbook.sql" />
+    <Build Include="dbo\Stored Procedures\UserPassbook_Sel_01.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="ShaipAgency.MSSQLDB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PublishLocations\LocalDB.ShaipAgency.MSSQLDB.publish.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostPublishScripts\Script.PostDeployUserPassbook.sql" />
   </ItemGroup>
 </Project>
