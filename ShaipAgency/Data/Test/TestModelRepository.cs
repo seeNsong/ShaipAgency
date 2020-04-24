@@ -57,7 +57,7 @@ namespace ShaipAgency.Data.Test
         {
 
             List<TestModel> testModels = new List<TestModel>();
-            //var conn2 = _context.Database.GetDbConnection();
+            var conn2 = _context.Database.GetDbConnection();
 
             try
             {
