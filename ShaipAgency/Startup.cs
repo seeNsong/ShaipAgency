@@ -16,9 +16,13 @@ using Microsoft.Extensions.Hosting;
 using ShaipAgency.Areas.Identity;
 using ShaipAgency.Data;
 using ShaipAgency.Model;
+
 using DevExpress.Blazor.DocumentMetadata;
 using Demo.Blazor;
 using Microsoft.Extensions.Options;
+
+
+using ShaipAgency.Data.Test;
 
 namespace ShaipAgency
 {
@@ -38,6 +42,9 @@ namespace ShaipAgency
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<TestDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
@@ -46,6 +53,7 @@ namespace ShaipAgency
             services.AddSingleton<WeatherapplicationUserservice>();
 
             services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddTransient<ITestModelRepository, TestModelRepository>();
 
             services.AddDocumentMetadata((serviceProvider, registrator) => {
                 DemoConfiguration config = serviceProvider.GetService<IOptions<DemoConfiguration>>().Value;

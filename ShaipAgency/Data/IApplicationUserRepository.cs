@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using ShaipAgency.Model;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ShaipAgency.Model
+namespace ShaipAgency.Data
 {
     public interface IApplicationUserRepository
     {

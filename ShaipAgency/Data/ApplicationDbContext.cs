@@ -16,5 +16,7 @@ namespace ShaipAgency.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+        
+
     }
 }

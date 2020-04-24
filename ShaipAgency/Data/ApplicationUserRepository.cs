@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShaipAgency.Data;
+using ShaipAgency.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ShaipAgency.Model
+
+
+namespace ShaipAgency.Data
 {
     public class ApplicationUserRepository : IApplicationUserRepository
     {
@@ -15,8 +17,9 @@ namespace ShaipAgency.Model
         }
 
         public async Task<IList<ApplicationUser>> GetApplicationUsers()
-        {            
+        {
             return await _context.ApplicationUsers.ToListAsync();
         }
+
     }
 }

@@ -1,19 +1,20 @@
-﻿@page "/Users"
+﻿@page "/Test/UsersSP"
 @inject IApplicationUserRepository ApplicationUserRepository
+@inject ITestModelRepository TestModelRepository
 @*DevExpress Modal 예제*@
 @using System
 @using System.ComponentModel.DataAnnotations
 @using DevExpress.Blazor
 
 
-@if (applicationUsers == null)
+@*@if (applicationUsers == null)
 {
     <p><em>Loding...</em></p>
     <div class="spinner-border" />
 }
 else
 {
-    <h3>Users</h3>
+    <h3>Users by EF Core</h3>
     <table class="table">
         <thead>
             <tr>
@@ -35,15 +36,51 @@ else
             }
         </tbody>
     </table>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" @onclick="btnCreate_Click">
-        모달팝업
-    </button>
-
-    
+}*@
 
 
-
+<h2>Stored Procedure 사용</h2>
+@if (testModels == null)
+{
+    <p><em>testModels Loding...</em></p>
+    <div class="spinner-border" />
 }
+else
+{
+    <hr />
+    <h3> Users By SP</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>ApplyNo</th>
+                <th>Charge</th>
+                <th>DateTime</th>
+                <th>ShaipName</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var testModel in testModels)
+            {
+                <tr>
+                    <td>@testModel.ApplyNo</td>
+                    <td>@testModel.Charge</td>
+                    <td>@testModel.DateTime</td>
+                    <td>@testModel.ShaipName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" @onclick="btnCreate_Click">
+    모달출력
+</button>
+
 
 @if (isShow)
 {
@@ -55,11 +92,11 @@ else
                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
 
                     @* JavaScript closing
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="document.getElementById('exampleModal').style.display='none'">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                        *@
-                    
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="document.getElementById('exampleModal').style.display='none'">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    *@
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -119,11 +156,15 @@ else
 @code {
 
     private IList<ApplicationUser> applicationUsers;
+    private List<TestModel> testModels;
+    private List<TestModel> testModels2;
 
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(500);
         applicationUsers = await ApplicationUserRepository.GetApplicationUsers();
+        testModels = await TestModelRepository.GetTestModelsBySPAsync();
+
     }
 
     // DevExpress Modal 예제용
