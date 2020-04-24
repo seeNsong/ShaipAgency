@@ -1,13 +1,13 @@
-﻿@page "/Test/Users"
+﻿@page "/Test/UsersUsingEF"
 @inject IApplicationUserRepository ApplicationUserRepository
-@inject ITestModelService TestModelService
+@inject ITestModelService TestModelServiceUsingEF
 @*DevExpress Modal 예제*@
 @using System
 @using System.ComponentModel.DataAnnotations
 @using DevExpress.Blazor
 
 
-@*@if (applicationUsers == null)
+@if (applicationUsers == null)
 {
     <p><em>Loding...</em></p>
     <div class="spinner-border" />
@@ -36,9 +36,10 @@ else
             }
         </tbody>
     </table>
-}*@
+}
 
-@if (testModels == null)
+<!-- Using SQL Query -->
+@if (testModels[0] == null)
 {
     <p><em>testModels Loding...</em></p>
     <div class="spinner-border" />
@@ -54,20 +55,57 @@ else
 
                 <th>ApplyNo</th>
                 <th>Charge</th>
-                <th>DateTime</th>
                 <th>ShaipName</th>
+                <th>CDateTime</th>
 
 
             </tr>
         </thead>
         <tbody>
-            @foreach (var testModel in testModels)
+            @foreach (var testModel in testModels[0])
             {
                 <tr>
                     <td>@testModel.ApplyNo</td>
                     <td>@testModel.Charge</td>
-                    <td>@testModel.DateTime</td>
                     <td>@testModel.ShaipName</td>
+                    <td>@testModel.CDateTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Using Stored Procedure -->
+@if (testModels[1] == null)
+{
+    <p><em>testModels Loding...</em></p>
+    <div class="spinner-border" />
+}
+else
+{
+    <hr />
+    <h3> Users By Stored Procedure Using EF</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>ApplyNo</th>
+                <th>Charge</th>
+                <th>ShaipName</th>
+                <th>CDateTime</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var testModel in testModels[1])
+            {
+                <tr>
+                    <td>@testModel.ApplyNo</td>
+                    <td>@testModel.Charge</td>                    
+                    <td>@testModel.ShaipName</td>
+                    <td>@testModel.CDateTime</td>
                 </tr>
             }
         </tbody>
@@ -154,16 +192,22 @@ else
 @code {
 
     private IList<ApplicationUser> applicationUsers;
-    private List<TestModel> testModels;
-    
+
+    private List<TestModel>[] testModels = new List<TestModel>[2];
+
+
+
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(500);
+        //await Task.Delay(500);
         applicationUsers = await ApplicationUserRepository.GetApplicationUsers();
 
 
-        testModels = await TestModelService.GetTestModelsByQueryAsync();
+        testModels[0] = await TestModelServiceUsingEF.GetTestModelsByQueryAsync();
+        testModels[1] = await TestModelServiceUsingEF.GetTestModelsBySPAsync();
+
+        ;
 
     }
 

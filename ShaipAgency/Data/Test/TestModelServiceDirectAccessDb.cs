@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ShaipAgency.Data.Test
 {
-    public class TestModelServiceDirectAccessDb : ITestModelService
+    public class TestModelServiceDirectAccessDb
     {
         IConfiguration _configuration;
 
@@ -25,35 +25,75 @@ namespace ShaipAgency.Data.Test
 
             try
             {
-                using ( SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("ProjectConnection")))
+                using ( SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("LocalDbConnection")))
                 {
                     await conn.OpenAsync();
-                    using (SqlCommand cmd = new SqlCommand("SELECT ApplyNo, Charge, ShaipName, DateTime From UserPassbook WITH(NOLOCK)", conn))
+                    using (SqlCommand command = new SqlCommand("SELECT ApplyNo, ShaipName, Charge, CDateTime From UserPassbook WITH(NOLOCK)", conn))
                     {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        using (SqlDataReader dataReader = await command.ExecuteReaderAsync())
                         {
-                            while (await reader.ReadAsync())
+                            while (await dataReader.ReadAsync())
                             {
-                                var row = new TestModel { ApplyNo = reader.GetString(0), Charge = reader.GetInt32(1), ShaipName = reader.GetString(2), DateTime = reader.GetDateTime(3) };
+                                var row = new TestModel { ApplyNo = dataReader.GetString(0), ShaipName = dataReader.GetString(1), Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) };
                                 testModels.Add(row);
                             }
                         }
-                    }
-                    await conn.CloseAsync();
+                    }                    
                 }
             }
             catch (SqlException e)
             {
                 Console.WriteLine(e.Message);
-            }
+            }            
             
 
             return testModels;
         }
 
-        public Task<List<TestModel>> GetTestModelsBySPAsync()
+        public async Task<List<TestModel>> GetTestModelsBySPAsync()
         {
-            throw new NotImplementedException();
+            List<TestModel> testModels = new List<TestModel>();
+
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("LocalDBConnection")))
+                {
+                    await conn.OpenAsync();
+
+                    using (SqlCommand command = new SqlCommand("",conn))
+                    {
+
+                        string query = "UserPassbook_Sel_01";
+                        var param = new SqlParameter("@ShaipName", SqlDbType.NVarChar);
+                        param.Value = "김성민";
+
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = query;
+                        command.Parameters.Add(param);
+
+                        using (SqlDataReader dataReader = await command.ExecuteReaderAsync())
+                        {
+
+                            while (await dataReader.ReadAsync())
+                            {
+                                testModels.Add(new TestModel { ApplyNo = dataReader.GetString(0), ShaipName = dataReader.GetString(1), Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) });
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return testModels;
+
         }
+
+
+        public async void 
+
     }
 }

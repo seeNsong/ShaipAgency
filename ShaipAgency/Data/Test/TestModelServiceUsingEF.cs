@@ -30,20 +30,20 @@ namespace ShaipAgency.Data.Test
                 await conn.OpenAsync();
                 using (var command = conn.CreateCommand())
                 {                                        
-                    string query = "SELECT ApplyNo, Charge, ShaipName, DateTime From UserPassbook WITH(NOLOCK)";
+                    string query = "SELECT ApplyNo, ShaipName, Charge, CDateTime From UserPassbook WITH(NOLOCK)";
                     command.CommandText = query;
 
-                    DbDataReader reader = await command.ExecuteReaderAsync();
+                    DbDataReader dataReader = await command.ExecuteReaderAsync();
 
-                    if (reader.HasRows)
+                    if (dataReader.HasRows)
                     {
-                        while (await reader.ReadAsync())
+                        while (await dataReader.ReadAsync())
                         {
-                            var row = new TestModel { ApplyNo = reader.GetString(0), Charge = reader.GetInt32(1), ShaipName = reader.GetString(2), DateTime = reader.GetDateTime(3) };
+                            var row = new TestModel { ApplyNo = dataReader.GetString(0), ShaipName = dataReader.GetString(1), Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) };
                             testModels.Add(row);
                         }
                     }
-                    reader.Dispose();
+                    dataReader.Dispose();
                 }
             }
             finally
@@ -51,7 +51,6 @@ namespace ShaipAgency.Data.Test
 
                 conn.Close();
                 //conn.Dispose();
-
             }
             return testModels;            
         }
@@ -76,18 +75,18 @@ namespace ShaipAgency.Data.Test
                     command.Parameters.Add(param);                   
                     
 
-                    DbDataReader reader = await command.ExecuteReaderAsync();
+                    DbDataReader dataReader = await command.ExecuteReaderAsync();
                                        
 
-                    if (reader.HasRows)
+                    if (dataReader.HasRows)
                     {
-                        while (await reader.ReadAsync())
+                        while (await dataReader.ReadAsync())
                         {
-                            var row = new TestModel { ApplyNo = reader.GetString(0), Charge = reader.GetInt32(1), ShaipName = reader.GetString(2), DateTime = reader.GetDateTime(3) };
+                            var row = new TestModel { ApplyNo = dataReader.GetString(0), ShaipName = dataReader.GetString(1),  Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) };
                             testModels.Add(row);
                         }
                     }
-                    reader.Dispose();
+                    dataReader.Dispose();
                 }
             }
             finally

@@ -9,9 +9,10 @@ namespace ShaipAgency.Model.TestModel
     {
         
         public string ApplyNo { get; set; }
-        public int Charge { get; set; }
-        public DateTime DateTime { get; set; }
         public string ShaipName { get; set; }
+        public int Charge { get; set; }
+        public DateTime CDateTime { get; set; }
+        
 
     }
 }

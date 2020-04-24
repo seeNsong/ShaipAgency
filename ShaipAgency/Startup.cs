@@ -53,7 +53,9 @@ namespace ShaipAgency
             services.AddSingleton<WeatherapplicationUserservice>();
 
             services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
-            services.AddTransient<ITestModelService, TestModelServiceDirectAccessDb>();
+            services.AddTransient<ITestModelService, TestModelServiceUsingEF>();
+            services.AddTransient<TestModelServiceDirectAccessDb>();
+            
 
             services.AddDocumentMetadata((serviceProvider, registrator) => {
                 DemoConfiguration config = serviceProvider.GetService<IOptions<DemoConfiguration>>().Value;

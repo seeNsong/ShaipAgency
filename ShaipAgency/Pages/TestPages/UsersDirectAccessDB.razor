@@ -1,11 +1,14 @@
-﻿@page "/Test/UsersSP"
+﻿@page "/Test/UsersDirectAccessDB"
 @inject IApplicationUserRepository ApplicationUserRepository
-@inject ITestModelService TestModelService
+@inject TestModelServiceDirectAccessDb TestModelServiceDirectAccessDb
+
 @*DevExpress Modal 예제*@
 @using System
 @using System.ComponentModel.DataAnnotations
 @using DevExpress.Blazor
 
+
+<h2>Direct Access Database Sample</h2>
 
 @if (applicationUsers == null)
 {
@@ -38,9 +41,8 @@ else
     </table>
 }
 
-
-<h2>Stored Procedure 사용</h2>
-@if (testModels == null)
+<!-- Using SQL Query -->
+@if (testModels[0] == null)
 {
     <p><em>testModels Loding...</em></p>
     <div class="spinner-border" />
@@ -48,7 +50,7 @@ else
 else
 {
     <hr />
-    <h3> Users By SP</h3>
+    <h3> Users By raw SQL queries</h3>
 
     <table class="table">
         <thead>
@@ -56,20 +58,57 @@ else
 
                 <th>ApplyNo</th>
                 <th>Charge</th>
-                <th>DateTime</th>
                 <th>ShaipName</th>
+                <th>CDateTime</th>
 
 
             </tr>
         </thead>
         <tbody>
-            @foreach (var testModel in testModels)
+            @foreach (var testModel in testModels[0])
             {
                 <tr>
                     <td>@testModel.ApplyNo</td>
                     <td>@testModel.Charge</td>
-                    <td>@testModel.DateTime</td>
                     <td>@testModel.ShaipName</td>
+                    <td>@testModel.CDateTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Using Stored Procedure -->
+@if (testModels[1] == null)
+{
+    <p><em>testModels Loding...</em></p>
+    <div class="spinner-border" />
+}
+else
+{
+    <hr />
+    <h3> Users By Stored Procedure Using EF</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>ApplyNo</th>
+                <th>Charge</th>
+                <th>ShaipName</th>
+                <th>CDateTime</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var testModel in testModels[1])
+            {
+                <tr>
+                    <td>@testModel.ApplyNo</td>
+                    <td>@testModel.Charge</td>
+                    <td>@testModel.ShaipName</td>
+                    <td>@testModel.CDateTime</td>
                 </tr>
             }
         </tbody>
@@ -77,11 +116,11 @@ else
 }
 
 
+
+
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" @onclick="btnCreate_Click">
-    모달출력
+    모달팝업
 </button>
-
-
 @if (isShow)
 {
 
@@ -156,14 +195,21 @@ else
 @code {
 
     private IList<ApplicationUser> applicationUsers;
-    private List<TestModel> testModels;
-    private List<TestModel> testModels2;
+    private List<TestModel>[] testModels = new List<TestModel>[2];
+
+
+
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(500);
+        //await Task.Delay(500);
         applicationUsers = await ApplicationUserRepository.GetApplicationUsers();
-        testModels = await TestModelService.GetTestModelsBySPAsync();
+
+
+        testModels[0] = await TestModelServiceDirectAccessDb.GetTestModelsByQueryAsync();
+        testModels[1] = await TestModelServiceDirectAccessDb.GetTestModelsBySPAsync();
+
+        ;
 
     }
 
