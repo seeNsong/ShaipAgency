@@ -3,6 +3,7 @@
 
 ## 06_에치금_디스플레이_신청_샘플페이지_구현
 - ApplicationUser, ApplicationRole Key타입 변경 -> Int
+- Nuget Package 설치 : MatBlazor
 
 ## 05_Database_Access_샘플페이지_작성
 - SQL Database Project 추가
