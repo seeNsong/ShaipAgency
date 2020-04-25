@@ -70,9 +70,9 @@
     <RefactorLog Include="ShaipAgency.MSSQLDB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PublishLocations\LocalDB.ShaipAgency.MSSQLDB.publish.publish.xml" />
+    <PostDeploy Include="PostPublishScripts\Script.PostDeployUserPassbook.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="PostPublishScripts\Script.PostDeployUserPassbook.sql" />
+    <None Include="LocalDB_ShaipAgency.MSSQLDB.publish.publish.xml" />
   </ItemGroup>
 </Project>
