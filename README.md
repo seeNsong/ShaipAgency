@@ -1,6 +1,8 @@
 # ShaipAgency
 개인프로젝트
 
+- Register 할 때 ShaipName 짓기 <<
+
 
 ## 06_에치금_디스플레이_신청_샘플페이지_구현
 ### [DB Project]
