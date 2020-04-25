@@ -1,0 +1,93 @@
+﻿@page "/TestPages/TestMatBlazor"
+@inject TestModelServiceDirectAccessDb TestModelServiceDirectAccessDb
+
+<h3>TestMatBlazor</h3>
+
+<MatButton>MatButton</MatButton>
+<hr />
+<MatThemeProvider Theme="@theme">
+    <div class="mat-blazor-demo-theme-app-row">
+        <MatButton Icon="favorite">Text</MatButton>
+        <MatButton Raised="true" Icon="favorite">Raised</MatButton>
+        <MatButton Unelevated="true" Icon="favorite">Unelevated</MatButton>
+        <MatButton Outlined="true" Icon="favorite">Outlined</MatButton>
+        <MatButton Dense="true" Icon="favorite">Dense</MatButton>
+    </div>
+</MatThemeProvider>
+
+
+@*<MatTable Items="@testModels" class="mat-elevation-z5">
+    <MatTableHeader>
+        <th>ApplyNo</th>
+        <th>UserId</th>
+        <th>ShaipName</th>
+        <th>Charge</th>
+        <th>CDateTime</th>
+    </MatTableHeader>
+    <MatTableRow>
+        <td>@context.RequestNo</td>
+        <td>@context.UserId</td>
+        <td>@context.ShaipName</td>
+        <td>@context.Charge</td>
+        <td>@context.CDateTime</td>
+            
+        
+    </MatTableRow>
+</MatTable>*@
+
+
+@*<MatTable Items="@cars">
+    
+    <MatTableHeader>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Horsepower</th>
+    </MatTableHeader>
+    <MatTableRow>
+        <td>@context.Name</td>
+        <td>@String.Format("${0:f2}", @context.Price)</td>
+        <td>@context.Horsepower</td>
+    </MatTableRow>
+</MatTable>*@
+
+@code {
+
+    private IEnumerable<TestModel> testModels;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        testModels = await TestModelServiceDirectAccessDb.GetTestModelsByQueryAsync();
+    }
+
+    MatTheme theme = new MatTheme()
+    {
+        Primary = MatThemeColors.Purple._500.Value,
+        Secondary = MatThemeColors.BlueGrey._500.Value
+    };
+
+    public class Car
+    {
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int Horsepower { get; set; }
+
+        public Car(string name, double price, int horsepower)
+        {
+            Name = name;
+            Price = price;
+            Horsepower = horsepower;
+        }
+    }
+
+    Car[] cars = new[]
+    {
+        new Car("Volkswagen Golf", 10000, 220),
+        new Car("Volkswagen Passat", 11000, 240),
+        new Car("Volkswagen Polo", 12000, 110),
+        new Car("Ford Focus", 13000, 200),
+        new Car("Ford Fiesta", 14000, 160),
+        new Car("Ford Fusion", 15000, 260),
+        new Car("Ford Mondeo", 16000, 120),
+    };
+}
