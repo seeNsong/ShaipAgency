@@ -1,9 +1,18 @@
 # ShaipAgency
 개인프로젝트
 
-## 06_에치금_디스플레이_신청_샘플페이지_구현
-- ApplicationUser, ApplicationRole Key타입 변경 -> Int
+## 06-1_MatBlazor설치
 - Nuget Package 설치 : MatBlazor
+
+## 06_에치금_디스플레이_신청_샘플페이지_구현
+### [DB Project]
+- ApplicationUser, ApplicationRole Key타입 변경 -> Int
+- Table 추가 : AspNetUsers (Same With Identity Auto Migrated Table)
+- Table Column 변경 : ApplyNo -> RequestNo / ShaipName -> UserID
+- Foreign Key 설정 : UserID -> AspNetUsers(Id)
+
+### [TestModel수정]
+- IEnumerable 리턴
 
 ## 05_Database_Access_샘플페이지_작성
 - SQL Database Project 추가
