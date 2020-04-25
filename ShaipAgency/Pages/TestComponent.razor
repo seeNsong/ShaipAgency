@@ -1,18 +1,19 @@
-﻿@page "/TestComponent"
+﻿@using Microsoft.AspNetCore.Authorization
+@page "/TestComponent"
+@attribute [Authorize]
+
+
+<h3> Test Component </h3>
 
 
 
-
-
-
-
-<AuthorizeView>
-    <Authorized>
-        <h3>TestComponent</h3>
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-    </Authorized>
-    <NotAuthorized>
-        <h3>NotAuthorized</h3> TestComponent
-    </NotAuthorized>
-</AuthorizeView>
+@*<AuthorizeView>
+        <Authorized>
+            <h3>TestComponent</h3>
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </Authorized>
+        <NotAuthorized>
+            <h3>NotAuthorized</h3> TestComponent
+        </NotAuthorized>
+    </AuthorizeView>*@
 

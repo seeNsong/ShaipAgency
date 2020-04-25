@@ -1,0 +1,84 @@
+﻿@page "/TestPages/TestDxDataGrid"
+
+
+@if (DataSource != null)
+{
+    <DxDataGrid Data="@DataSource">
+        @*<DxDataGridCommandColumn></DxDataGridCommandColumn>
+        <DxDataGridDateEditColumn Field="@nameof(WeatherForecast.Date)" DisplayFormatString="D" EditFormatString="D">
+        </DxDataGridDateEditColumn>*@
+        <DxDataGridColumn Field="@nameof(TestModel.UserId)" Caption="UserId"></DxDataGridColumn>
+        @*<DxDataGridSpinEditColumn Field="@nameof(WeatherForecast.TemperatureC)" Caption="@("Temp. (\x2103)")"
+                                      TextAlignment="DataGridTextAlign.Left"></DxDataGridSpinEditColumn>
+            <DxDataGridComboBoxColumn Field="@nameof(WeatherForecast.WeatherType)" Caption="Cloudiness"
+                                      DataAsync="@ForecastService.GetCloudinessAsync" TextAlignment="DataGridTextAlign.Left"></DxDataGridComboBoxColumn>
+            <DxDataGridCheckBoxColumn Field="@nameof(WeatherForecast.Precipitates)"></DxDataGridCheckBoxColumn>
+
+        <DxDataGridCommandColumn></DxDataGridCommandColumn>
+            <DxDataGridDateEditColumn Field="@nameof(WeatherForecast.Date)" DisplayFormatString="D" EditFormatString="D">
+            </DxDataGridDateEditColumn>
+            <DxDataGridColumn Field="@nameof(WeatherForecast.Summary)" Caption="Summary"></DxDataGridColumn>
+            <DxDataGridSpinEditColumn Field="@nameof(WeatherForecast.TemperatureC)" Caption="@("Temp. (\x2103)")"
+                                      TextAlignment="DataGridTextAlign.Left"></DxDataGridSpinEditColumn>
+            <DxDataGridComboBoxColumn Field="@nameof(WeatherForecast.WeatherType)" Caption="Cloudiness"
+                                      DataAsync="@ForecastService.GetCloudinessAsync" TextAlignment="DataGridTextAlign.Left"></DxDataGridComboBoxColumn>
+            <DxDataGridCheckBoxColumn Field="@nameof(WeatherForecast.Precipitates)"></DxDataGridCheckBoxColumn>*@
+    </DxDataGrid>
+}
+<DxDataGrid DataAsync="@TestModelServiceDirectAccessDb.GetTestModelsByQueryAsyncEnum">
+    @*<DxDataGridCommandColumn></DxDataGridCommandColumn>
+    <DxDataGridDateEditColumn Field="@nameof(WeatherForecast.Date)" DisplayFormatString="D" EditFormatString="D">
+    </DxDataGridDateEditColumn>*@
+    <DxDataGridColumn Field="@nameof(TestModel.RequestNo)" Caption="RequestNo"></DxDataGridColumn>
+    @*<DxDataGridSpinEditColumn Field="@nameof(WeatherForecast.TemperatureC)" Caption="@("Temp. (\x2103)")"
+                                  TextAlignment="DataGridTextAlign.Left"></DxDataGridSpinEditColumn>
+        <DxDataGridComboBoxColumn Field="@nameof(WeatherForecast.WeatherType)" Caption="Cloudiness"
+                                  DataAsync="@ForecastService.GetCloudinessAsync" TextAlignment="DataGridTextAlign.Left"></DxDataGridComboBoxColumn>
+        <DxDataGridCheckBoxColumn Field="@nameof(WeatherForecast.Precipitates)"></DxDataGridCheckBoxColumn>
+
+    <DxDataGridCommandColumn></DxDataGridCommandColumn>
+        <DxDataGridDateEditColumn Field="@nameof(WeatherForecast.Date)" DisplayFormatString="D" EditFormatString="D">
+        </DxDataGridDateEditColumn>
+        <DxDataGridColumn Field="@nameof(WeatherForecast.Summary)" Caption="Summary"></DxDataGridColumn>
+        <DxDataGridSpinEditColumn Field="@nameof(WeatherForecast.TemperatureC)" Caption="@("Temp. (\x2103)")"
+                                  TextAlignment="DataGridTextAlign.Left"></DxDataGridSpinEditColumn>
+        <DxDataGridComboBoxColumn Field="@nameof(WeatherForecast.WeatherType)" Caption="Cloudiness"
+                                  DataAsync="@ForecastService.GetCloudinessAsync" TextAlignment="DataGridTextAlign.Left"></DxDataGridComboBoxColumn>
+        <DxDataGridCheckBoxColumn Field="@nameof(WeatherForecast.Precipitates)"></DxDataGridCheckBoxColumn>*@
+</DxDataGrid>
+
+<DxDataGrid DataAsync="@ForecastService.GetForecastAsync">
+    <DxDataGridCommandColumn></DxDataGridCommandColumn>
+    <DxDataGridDateEditColumn Field="@nameof(WeatherForecast.Date)" DisplayFormatString="D" EditFormatString="D">
+    </DxDataGridDateEditColumn>
+    <DxDataGridColumn Field="@nameof(WeatherForecast.Summary)" Caption="Summary"></DxDataGridColumn>
+    <DxDataGridSpinEditColumn Field="@nameof(WeatherForecast.TemperatureC)" Caption="@("Temp. (\x2103)")"
+                              TextAlignment="DataGridTextAlign.Left"></DxDataGridSpinEditColumn>
+    <DxDataGridComboBoxColumn Field="@nameof(WeatherForecast.WeatherType)" Caption="Cloudiness"
+                              DataAsync="@ForecastService.GetCloudinessAsync" TextAlignment="DataGridTextAlign.Left"></DxDataGridComboBoxColumn>
+    <DxDataGridCheckBoxColumn Field="@nameof(WeatherForecast.Precipitates)"></DxDataGridCheckBoxColumn>
+</DxDataGrid>
+
+@inject WeatherForecastService ForecastService
+@inject TestModelServiceDirectAccessDb TestModelServiceDirectAccessDb
+@code
+{
+    //private IEnumerable<TestModel> datasource;
+    //private List<TestModel> testModels;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+
+    //    testModels = await TestModelServiceDirectAccessDb.GetTestModelsByQueryAsync();
+    //    datasource = testModels.AsEnumerable();
+
+    //}
+
+    IEnumerable<TestModel> DataSource;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DataSource = await TestModelServiceDirectAccessDb.GetTestModelsByQueryAsyncEnum();
+    }
+
+}   

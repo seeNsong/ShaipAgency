@@ -10,14 +10,14 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-IF ( SELECT COUNT(*) FROM dbo.UserPassbook WITH(NOLOCK) ) = 0
+IF ( SELECT COUNT(*) FROM dbo.UserPassbook WITH(NOLOCK) ) = 0 AND (SELECT COUNT(*) FROM dbo.AspNetUsers WITH(NOLOCK) WHERE Id = 1) > 0
 BEGIN
 
-    INSERT INTO dbo.UserPassbook    (ApplyNo,       ShaipName,      Charge,		CDateTime)
-    VALUES                          ('202004241215',  N'김성민',      300000,    GETDATE()),
-                                    ('202004243232',  N'김성민',      -2000,    GETDATE()),
-                                    ('202004243241',  N'김성민',      -5000,    GETDATE()),
-                                    ('202004249873',  N'김성민',      -4000,    GETDATE())
+    INSERT INTO dbo.UserPassbook    (RequestNo,       UserID,      Charge,		CDateTime)
+    VALUES                          ('202004241215',  1,      300000,    GETDATE()),
+                                    ('202004243232',  1,      -2000,    GETDATE()),
+                                    ('202004243241',  1,      -5000,    GETDATE()),
+                                    ('202004249873',  1,      -4000,    GETDATE())
     
     PRINT 'UserPassbook Data INSERTION COMPLETED'
 	

@@ -1,11 +1,14 @@
-﻿@page "/Test/UsersUsingEF"
+﻿@page "/TestPages/UsersUsingEF"
 @inject IApplicationUserRepository ApplicationUserRepository
 @inject ITestModelService TestModelServiceUsingEF
 @*DevExpress Modal 예제*@
 @using System
 @using System.ComponentModel.DataAnnotations
 @using DevExpress.Blazor
+@using Microsoft.AspNetCore.Identity
 
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 @if (applicationUsers == null)
 {
@@ -14,247 +17,253 @@
 }
 else
 {
-    <h3>Users by EF Core</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>UserName(C)</th>
-                <th>ShaipName</th>
+    <AuthorizeView>
+        <h2> @UserManager.GetUserId(context.User)</h2>
 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var applicationUser in applicationUsers)
-            {
+    </AuthorizeView>
+    
+
+        <h3>Users by EF Core</h3>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@applicationUser.Id</td>
-                    <td>@applicationUser.UserName</td>
-                    <td>@applicationUser.ShaipName</td>
+                    <th>ID</th>
+                    <th>UserName(C)</th>
+                    <th>ShaipName</th>
 
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var applicationUser in applicationUsers)
+                {
+                    <tr>
+                        <td>@applicationUser.Id</td>
+                        <td>@applicationUser.UserName</td>
+                        <td>@applicationUser.ShaipName</td>
 
-<!-- Using SQL Query -->
-@if (testModels[0] == null)
-{
-    <p><em>testModels Loding...</em></p>
-    <div class="spinner-border" />
-}
-else
-{
-    <hr />
-    <h3> Users By raw SQL queries</h3>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
 
-    <table class="table">
-        <thead>
-            <tr>
+        <!-- Using SQL Query -->
+        @if (testModels[0] == null)
+        {
+            <p><em>testModels Loding...</em></p>
+            <div class="spinner-border" />
+        }
+        else
+        {
+            <hr />
+            <h3> Users By raw SQL queries</h3>
 
-                <th>ApplyNo</th>
-                <th>Charge</th>
-                <th>ShaipName</th>
-                <th>CDateTime</th>
+            <table class="table">
+                <thead>
+                    <tr>
 
-
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var testModel in testModels[0])
-            {
-                <tr>
-                    <td>@testModel.ApplyNo</td>
-                    <td>@testModel.Charge</td>
-                    <td>@testModel.ShaipName</td>
-                    <td>@testModel.CDateTime</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-<!-- Using Stored Procedure -->
-@if (testModels[1] == null)
-{
-    <p><em>testModels Loding...</em></p>
-    <div class="spinner-border" />
-}
-else
-{
-    <hr />
-    <h3> Users By Stored Procedure Using EF</h3>
-
-    <table class="table">
-        <thead>
-            <tr>
-
-                <th>ApplyNo</th>
-                <th>Charge</th>
-                <th>ShaipName</th>
-                <th>CDateTime</th>
+                        <th>ApplyNo</th>
+                        <th>Charge</th>
+                        <th>UserId</th>
+                        <th>ShaipName</th>
+                        <th>CDateTime</th>
 
 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var testModel in testModels[1])
-            {
-                <tr>
-                    <td>@testModel.ApplyNo</td>
-                    <td>@testModel.Charge</td>                    
-                    <td>@testModel.ShaipName</td>
-                    <td>@testModel.CDateTime</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var testModel in testModels[0])
+                    {
+                        <tr>
+                            <td>@testModel.RequestNo</td>
+                            <td>@testModel.Charge</td>
+                            <td>@testModel.UserId</td>
+                            <td>@testModel.ShaipName</td>
+                            <td>@testModel.CDateTime</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <!-- Using Stored Procedure -->
+        @if (testModels[1] == null)
+        {
+            <p><em>testModels Loding...</em></p>
+            <div class="spinner-border" />
+        }
+        else
+        {
+            <hr />
+            <h3> Users By Stored Procedure Using EF</h3>
+
+            <table class="table">
+                <thead>
+                    <tr>
+
+                        <th>ApplyNo</th>
+                        <th>UserId</th>
+                        <th>ShaipName</th>
+                        <th>Charge</th>
+                        <th>CDateTime</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var testModel in testModels[1])
+                    {
+                        <tr>
+                            <td>@testModel.RequestNo</td>
+                            <td>@testModel.UserId</td>
+                            <td>@testModel.ShaipName</td>
+                            <td>@testModel.Charge</td>                            
+                            <td>@testModel.CDateTime</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
 
 
 
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" @onclick="btnCreate_Click">
-    모달팝업
-</button>
-@if (isShow)
-{
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" @onclick="btnCreate_Click">
+            모달팝업
+        </button>
+        @if (isShow)
+        {
 
-    <div class="modal fade show" style="display:block" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <div class="modal fade show" style="display:block" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
 
-                    @* JavaScript closing
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="document.getElementById('exampleModal').style.display='none'">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    *@
+                            @* JavaScript closing
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="document.getElementById('exampleModal').style.display='none'">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            *@
 
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <EditForm Model="@starship" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit" Context="EditFormContext">
-                        <DataAnnotationsValidator />
-                        <DxFormLayout>
-                            <DxFormLayoutItem Caption="Identifier:" ColSpanMd="6">
-                                <Template>
-                                    <DxTextBox @bind-Text="@starship.Identifier" />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="Primary Classification:" ColSpanMd="6">
-                                <Template>
-                                    <DxComboBox NullText="Select classification ..."
-                                                ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                                                @bind-SelectedItem="@starship.Classification"
-                                                Data="@(new List<string>() { "Defense", "Exploration", "Diplomacy" })" />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="Maximum Accommodation:" ColSpanMd="6">
-                                <Template>
-                                    <DxSpinEdit Id="accommodation" @bind-Value="@starship.MaximumAccommodation" />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="Production Date:" ColSpanMd="6">
-                                <Template>
-                                    <DxDateEdit @bind-Date="@starship.ProductionDate" />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem ColSpanMd="12">
-                                <Template>
-                                    <ValidationSummary />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem ColSpanMd="12">
-                                <Template>
-                                    <DxButton SubmitFormOnClick="true" Text="Submit" RenderStyle="@ButtonRenderStyle.Secondary" />
-                                </Template>
-                            </DxFormLayoutItem>
-                        </DxFormLayout>
-                    </EditForm>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <EditForm Model="@starship" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit" Context="EditFormContext">
+                                <DataAnnotationsValidator />
+                                <DxFormLayout>
+                                    <DxFormLayoutItem Caption="Identifier:" ColSpanMd="6">
+                                        <Template>
+                                            <DxTextBox @bind-Text="@starship.Identifier" />
+                                        </Template>
+                                    </DxFormLayoutItem>
+                                    <DxFormLayoutItem Caption="Primary Classification:" ColSpanMd="6">
+                                        <Template>
+                                            <DxComboBox NullText="Select classification ..."
+                                                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                                                        @bind-SelectedItem="@starship.Classification"
+                                                        Data="@(new List<string>() { "Defense", "Exploration", "Diplomacy" })" />
+                                        </Template>
+                                    </DxFormLayoutItem>
+                                    <DxFormLayoutItem Caption="Maximum Accommodation:" ColSpanMd="6">
+                                        <Template>
+                                            <DxSpinEdit Id="accommodation" @bind-Value="@starship.MaximumAccommodation" />
+                                        </Template>
+                                    </DxFormLayoutItem>
+                                    <DxFormLayoutItem Caption="Production Date:" ColSpanMd="6">
+                                        <Template>
+                                            <DxDateEdit @bind-Date="@starship.ProductionDate" />
+                                        </Template>
+                                    </DxFormLayoutItem>
+                                    <DxFormLayoutItem ColSpanMd="12">
+                                        <Template>
+                                            <ValidationSummary />
+                                        </Template>
+                                    </DxFormLayoutItem>
+                                    <DxFormLayoutItem ColSpanMd="12">
+                                        <Template>
+                                            <DxButton SubmitFormOnClick="true" Text="Submit" RenderStyle="@ButtonRenderStyle.Secondary" />
+                                        </Template>
+                                    </DxFormLayoutItem>
+                                </DxFormLayout>
+                            </EditForm>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-}
+        }
 
 
 
-@code {
+        @code {
 
     private IList<ApplicationUser> applicationUsers;
 
-    private List<TestModel>[] testModels = new List<TestModel>[2];
+        private List<TestModel>[] testModels = new List<TestModel>[2];
 
 
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        //await Task.Delay(500);
-        applicationUsers = await ApplicationUserRepository.GetApplicationUsers();
-
-
-        testModels[0] = await TestModelServiceUsingEF.GetTestModelsByQueryAsync();
-        testModels[1] = await TestModelServiceUsingEF.GetTestModelsBySPAsync();
-
-        ;
-
-    }
-
-    // DevExpress Modal 예제용
-    #region
-    private bool isShow = false;
-    private void btnCreate_Click()
-    {
-        isShow = true;
-    }
-
-    private Starship starship = new Starship();
-
-    private void HandleValidSubmit()
-    {
-        Console.WriteLine("OnValidSubmit");
-    }
-    private void HandleInvalidSubmit()
-    {
-        Console.WriteLine("OnInvalidSubmit");
-    }
-
-    public class Starship
-    {
-        [Required]
-        [StringLength(16,
-        ErrorMessage = "The Identifier exceeds 16 characters.")]
-        public string Identifier { get; set; }
-
-        [Required]
-        public string Classification { get; set; }
-
-        [Range(1, 100000, ErrorMessage = "The Maximum Accommodation value should be a number between 1 and 100,000.")]
-        public int MaximumAccommodation { get; set; }
-
-        [Required]
-        [DateInPastAttribute(ErrorMessage = "The Production Date value cannot be later than today.")]
-        public DateTime ProductionDate { get; set; }
-    }
-
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
-    public class DateInPastAttribute : ValidationAttribute
-    {
-        public override bool IsValid(object value)
+        protected override async Task OnInitializedAsync()
         {
-            return (DateTime)value <= DateTime.Today;
+            //await Task.Delay(500);
+            applicationUsers = await ApplicationUserRepository.GetApplicationUsers();
+
+
+            testModels[0] = await TestModelServiceUsingEF.GetTestModelsByQueryAsync();
+            testModels[1] = await TestModelServiceUsingEF.GetTestModelsBySPAsync();
+
         }
-    }
-    #endregion
-}
+
+        // DevExpress Modal 예제용
+        #region
+        private bool isShow = false;
+        private void btnCreate_Click()
+        {
+            isShow = true;
+        }
+
+        private Starship starship = new Starship();
+
+        private void HandleValidSubmit()
+        {
+            Console.WriteLine("OnValidSubmit");
+        }
+        private void HandleInvalidSubmit()
+        {
+            Console.WriteLine("OnInvalidSubmit");
+        }
+
+        public class Starship
+        {
+            [Required]
+            [StringLength(16,
+            ErrorMessage = "The Identifier exceeds 16 characters.")]
+            public string Identifier { get; set; }
+
+            [Required]
+            public string Classification { get; set; }
+
+            [Range(1, 100000, ErrorMessage = "The Maximum Accommodation value should be a number between 1 and 100,000.")]
+            public int MaximumAccommodation { get; set; }
+
+            [Required]
+            [DateInPastAttribute(ErrorMessage = "The Production Date value cannot be later than today.")]
+            public DateTime ProductionDate { get; set; }
+        }
+
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
+        public class DateInPastAttribute : ValidationAttribute
+        {
+            public override bool IsValid(object value)
+            {
+                return (DateTime)value <= DateTime.Today;
+            }
+        }
+        #endregion
+        }

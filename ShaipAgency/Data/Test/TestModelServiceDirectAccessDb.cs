@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System.Threading;
 
 namespace ShaipAgency.Data.Test
 {
@@ -28,13 +29,13 @@ namespace ShaipAgency.Data.Test
                 using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("LocalDbConnection")))
                 {
                     await conn.OpenAsync();
-                    using (SqlCommand command = new SqlCommand("SELECT ApplyNo, ShaipName, Charge, CDateTime From UserPassbook WITH(NOLOCK)", conn))
+                    using (SqlCommand command = new SqlCommand("SELECT RequestNo, UserId, Charge, CDateTime From UserPassbook WITH(NOLOCK)", conn))
                     {
                         using (SqlDataReader dataReader = await command.ExecuteReaderAsync())
                         {
                             while (await dataReader.ReadAsync())
                             {
-                                var row = new TestModel { ApplyNo = dataReader.GetString(0), ShaipName = dataReader.GetString(1), Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) };
+                                var row = new TestModel { RequestNo = dataReader.GetString(0), UserId = dataReader.GetInt32(1), Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) };
                                 testModels.Add(row);
                             }
                         }
@@ -50,10 +51,9 @@ namespace ShaipAgency.Data.Test
             return testModels;
         }
 
-        public async Task<List<TestModel>> GetTestModelsBySPAsync()
+        public async Task<IEnumerable<TestModel>> GetTestModelsBySPAsync()
         {
             List<TestModel> testModels = new List<TestModel>();
-
 
             try
             {
@@ -65,8 +65,8 @@ namespace ShaipAgency.Data.Test
                     {
 
                         string query = "UserPassbook_Sel_01";
-                        var param = new SqlParameter("@ShaipName", SqlDbType.NVarChar);
-                        param.Value = "김성민";
+                        var param = new SqlParameter("@UserId", SqlDbType.Int);
+                        param.Value = "1";
 
                         command.CommandType = CommandType.StoredProcedure;
                         command.CommandText = query;
@@ -77,7 +77,7 @@ namespace ShaipAgency.Data.Test
 
                             while (await dataReader.ReadAsync())
                             {
-                                testModels.Add(new TestModel { ApplyNo = dataReader.GetString(0), ShaipName = dataReader.GetString(1), Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) });
+                                testModels.Add(new TestModel { RequestNo = dataReader.GetString(0), UserId = dataReader.GetInt32(1), ShaipName = dataReader.GetString(2), Charge = dataReader.GetInt32(3), CDateTime = dataReader.GetDateTime(4) });
                             }
                         }
                     }
@@ -87,9 +87,38 @@ namespace ShaipAgency.Data.Test
             {
                 Console.WriteLine(e.Message);
             }
+            return testModels.AsEnumerable();
+        }
 
-            return testModels;
+        // for DevExpress DataGrid
+        public async Task<IEnumerable<TestModel>> GetTestModelsByQueryAsyncEnum(CancellationToken ct = default)
+        {
+            List<TestModel> testModels = new List<TestModel>();
 
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("LocalDbConnection")))
+                {
+                    await conn.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("SELECT RequestNo, UserId, Charge, CDateTime From UserPassbook WITH(NOLOCK)", conn))
+                    {
+                        using (SqlDataReader dataReader = await command.ExecuteReaderAsync())
+                        {
+                            while (await dataReader.ReadAsync())
+                            {
+                                var row = new TestModel { RequestNo = dataReader.GetString(0), UserId = dataReader.GetInt32(1), Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) };
+                                testModels.Add(row);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return testModels.AsEnumerable();
         }
 
     }

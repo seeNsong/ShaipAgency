@@ -1,7 +1,6 @@
-﻿@page "/Test/UsersDirectAccessDB"
+﻿@page "/TestPages/UsersDirectAccessDB"
 @inject IApplicationUserRepository ApplicationUserRepository
 @inject TestModelServiceDirectAccessDb TestModelServiceDirectAccessDb
-
 @*DevExpress Modal 예제*@
 @using System
 @using System.ComponentModel.DataAnnotations
@@ -17,7 +16,7 @@
 }
 else
 {
-    <h3>Users by EF Core</h3>
+    <h3>Users by Direct Access Database</h3>
     <table class="table">
         <thead>
             <tr>
@@ -42,7 +41,7 @@ else
 }
 
 <!-- Using SQL Query -->
-@if (testModels[0] == null)
+@if (testModels == null)
 {
     <p><em>testModels Loding...</em></p>
     <div class="spinner-border" />
@@ -50,26 +49,27 @@ else
 else
 {
     <hr />
-    <h3> Users By raw SQL queries</h3>
-
+    <h3> Users Direct Query to DB</h3>
     <table class="table">
         <thead>
             <tr>
 
                 <th>ApplyNo</th>
                 <th>Charge</th>
-                <th>ShaipName</th>
+                <th>UserId</th>
+
                 <th>CDateTime</th>
 
 
             </tr>
         </thead>
         <tbody>
-            @foreach (var testModel in testModels[0])
+            @foreach (var testModel in testModels)
             {
                 <tr>
-                    <td>@testModel.ApplyNo</td>
+                    <td>@testModel.RequestNo</td>
                     <td>@testModel.Charge</td>
+                    <td>@testModel.UserId</td>
                     <td>@testModel.ShaipName</td>
                     <td>@testModel.CDateTime</td>
                 </tr>
@@ -79,7 +79,7 @@ else
 }
 
 <!-- Using Stored Procedure -->
-@if (testModels[1] == null)
+@if (testModelsEnum == null)
 {
     <p><em>testModels Loding...</em></p>
     <div class="spinner-border" />
@@ -88,26 +88,25 @@ else
 {
     <hr />
     <h3> Users By Stored Procedure Using EF</h3>
-
     <table class="table">
         <thead>
             <tr>
 
                 <th>ApplyNo</th>
-                <th>Charge</th>
+                <th>UserId</th>
                 <th>ShaipName</th>
+                <th>Charge</th>
                 <th>CDateTime</th>
-
-
             </tr>
         </thead>
         <tbody>
-            @foreach (var testModel in testModels[1])
+            @foreach (var testModel in testModelsEnum)
             {
                 <tr>
-                    <td>@testModel.ApplyNo</td>
-                    <td>@testModel.Charge</td>
+                    <td>@testModel.RequestNo</td>
+                    <td>@testModel.UserId</td>
                     <td>@testModel.ShaipName</td>
+                    <td>@testModel.Charge</td>
                     <td>@testModel.CDateTime</td>
                 </tr>
             }
@@ -195,9 +194,9 @@ else
 @code {
 
     private IList<ApplicationUser> applicationUsers;
-    private List<TestModel>[] testModels = new List<TestModel>[2];
-
-
+    private List<TestModel> testModels;
+    //private List<TestModel> testModelsEnum;
+    private IEnumerable<TestModel> testModelsEnum;
 
 
     protected override async Task OnInitializedAsync()
@@ -206,8 +205,8 @@ else
         applicationUsers = await ApplicationUserRepository.GetApplicationUsers();
 
 
-        testModels[0] = await TestModelServiceDirectAccessDb.GetTestModelsByQueryAsync();
-        testModels[1] = await TestModelServiceDirectAccessDb.GetTestModelsBySPAsync();
+        testModels = await TestModelServiceDirectAccessDb.GetTestModelsByQueryAsync();
+        testModelsEnum = await TestModelServiceDirectAccessDb.GetTestModelsByQueryAsyncEnum();
 
         ;
 

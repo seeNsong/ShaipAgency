@@ -50,7 +50,7 @@ namespace ShaipAgency
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
-            services.AddSingleton<WeatherapplicationUserservice>();
+            services.AddSingleton<WeatherForecastService>();
 
             services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddTransient<ITestModelService, TestModelServiceUsingEF>();
