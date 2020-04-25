@@ -1,8 +1,6 @@
 # ShaipAgency
 개인프로젝트
 
-## 06-1_MatBlazor설치
-- Nuget Package 설치 : MatBlazor
 
 ## 06_에치금_디스플레이_신청_샘플페이지_구현
 ### [DB Project]
@@ -13,6 +11,12 @@
 
 ### [TestModel수정]
 - IEnumerable 리턴
+
+### 06-1_MatBlazor설치
+- Nuget Package 설치 : MatBlazor
+
+### Balance Dropdown 추가
+- Balance Deposit 모달창 추가
 
 ## 05_Database_Access_샘플페이지_작성
 - SQL Database Project 추가
