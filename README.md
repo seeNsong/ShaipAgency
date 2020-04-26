@@ -20,6 +20,10 @@
 ### Balance Dropdown 추가
 - Balance Deposit 모달창 추가
 
+### Remote Db Access 세팅 
+- Azure Keyvault 셋팅
+- appsetting.json => DbMode : LocalDbConnection, RemoteDb
+
 ## 05_Database_Access_샘플페이지_작성
 - SQL Database Project 추가
 - EF & None EF Version Database Access 샘플 페이지 추가
