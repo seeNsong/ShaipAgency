@@ -1,0 +1,157 @@
+﻿@page "/Standards/RequestCodeManage"
+@using ShaipAgency.Model.Standards
+@inject RequestCodeService RequestCodeService
+
+<h3>Request Code List</h3>
+@if (requestCodeList != null)
+{
+    <div class="row col-6">
+        @*<DxDataGrid DataAsync="@RequestCodeService.ToList"*@
+        <DxDataGrid Data="@requestCodeList"
+                    PageSize="20"
+                    ShowFilterRow="false"
+                    RowRemovingAsync="@OnRowRemoving"
+                    RowUpdatingAsync="@OnRowUpdating"
+                    RowInsertingAsync="@OnRowInserting"
+                    InitNewRow="@OnInitNewRow"
+                    style="width:100%">
+            <DxDataGridCommandColumn Width="100px" DeleteButtonVisible="false" />
+            <DxDataGridColumn Field="@nameof(RequestCodeModel.RequestCode)" Caption="RequestCode" Width="100px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(RequestCodeModel.RequestName)" Caption="RequestName" Width="200px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridCheckBoxColumn Field="@nameof(RequestCodeModel.UseYN)" Caption="UseYN" Width="50px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(RequestCodeModel.UserId)" Caption="UserId" Width="100px" />
+            <DxDataGridDateEditColumn Field="@nameof(RequestCodeModel.CreationDateTime)" DisplayFormatString="g" EditorVisible="DefaultBoolean.False" />
+        </DxDataGrid>
+    </div>
+
+    <button class="btn btn-primary" @onclick="ToggleBalanceDepositDialog">button test</button>
+}
+
+
+<MatDialog @bind-IsOpen="@balanceDepositShown">
+    <MatDialogTitle>Title</MatDialogTitle>
+    <MatDialogContent>
+        @*<p>What's your favorite animal?</p>
+            <MatTextField @bind-Value="@textDefault"></MatTextField>*@
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Example textarea</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+        </div>
+        @if (requestCodeList != null)
+        {
+            <div class="row col-6">
+
+                <MatAccordion>
+                    @foreach (var requestCode in requestCodeList)
+                    {
+
+
+                        <MatExpansionPanel>
+                            <MatExpansionPanelSummary>
+                                <MatExpansionPanelHeader>@requestCode.RequestName</MatExpansionPanelHeader>
+                                <MatExpansionPanelSubHeader>
+                                    @requestCode.RequestCode
+                                </MatExpansionPanelSubHeader>
+                                <MatExpansionPanelSubHeader>
+                                    @requestCode.CreationDateTime
+                                </MatExpansionPanelSubHeader>
+
+                            </MatExpansionPanelSummary>
+                            <MatExpansionPanelDetails>
+                                <DxCheckBox Checked="@requestCode.UseYN"></DxCheckBox>
+                                <span>UserId : @requestCode.UserId</span>
+
+                            </MatExpansionPanelDetails>
+
+                        </MatExpansionPanel>
+                    }
+
+                    @*<MatExpansionPanel @bind-Expanded="@panelOpenState"
+                            <MatExpansionPanelSummary>
+                                <MatExpansionPanelHeader>Self aware panel</MatExpansionPanelHeader>
+                                <MatExpansionPanelSubHeader>
+                                    Currently I am @(panelOpenState ? "open" : "closed")
+                                </MatExpansionPanelSubHeader>
+                                <MatExpansionPanelSubHeader>
+                                    Currently I am @(panelOpenState ? "open" : "closed")
+                                </MatExpansionPanelSubHeader>
+
+                            </MatExpansionPanelSummary>
+                            <MatExpansionPanelDetails>
+                                <p>I'm visible because I am open</p>
+                                <button class="btn btn-primary" @onclick="ToggleBalanceDepositDialog">button test</button>
+                            </MatExpansionPanelDetails>
+
+                        </MatExpansionPanel>*@
+
+                </MatAccordion>
+
+            </div>
+        }
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@(e => { balanceDepositShown = false; })">No Thanks</MatButton>
+        <MatButton OnClick="@BalanceDeposit_ClickOK">OK</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+
+@code {
+
+
+    IEnumerable<RequestCodeModel> requestCodeList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        requestCodeList = await RequestCodeService.ToList();
+    }
+
+    #region MatBlazor_ExtensionPanel
+
+    bool panelOpenState;
+
+    bool balanceDepositShown = false;
+
+    void ToggleBalanceDepositDialog()
+    {
+        balanceDepositShown = !balanceDepositShown;
+    }
+
+    string textDefault = "textDefault";
+
+    void BalanceDeposit_ClickOK()
+    {
+        // OK 처리
+        balanceDepositShown = false;
+    }
+    #endregion
+
+
+    #region DxDataGrid
+    async Task OnRowRemoving(RequestCodeModel requestCode)
+    {
+        await RequestCodeService.Remove(requestCode);
+    }
+    async Task OnRowUpdating(RequestCodeModel requestCode, IDictionary<string, object> newRequestCode)
+    {
+        await RequestCodeService.Update(requestCode, newRequestCode);
+    }
+    async Task OnRowInserting(IDictionary<string, object> newRequestCode)
+    {
+        await RequestCodeService.Add(newRequestCode);
+    }
+    Task OnInitNewRow(Dictionary<string, object> values)
+    {
+
+        values.Add("UseId", 1);
+        values.Add("CreationDateTime", DateTime.Now);
+        values.Add("UseYN", "true");
+
+
+        return Task.CompletedTask;
+    }
+    #endregion DxDataGrid
+
+
+}
+

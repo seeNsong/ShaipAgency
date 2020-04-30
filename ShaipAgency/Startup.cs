@@ -23,11 +23,14 @@ using Microsoft.Extensions.Options;
 
 
 using ShaipAgency.Data.Test;
+using ShaipAgency.Data.Standards;
 
 namespace ShaipAgency
 {
+    
     public class Startup
-    {
+    {      
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -39,12 +42,15 @@ namespace ShaipAgency
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("LocalDbConnection")));
-            services.AddDbContext<TestDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("LocalDbConnection")));
+                options.UseSqlServer(Configuration[Configuration["DbMode"]]));
+
+
+            //services.AddDbContext<TestDbContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("LocalDbConnection")));
+
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
@@ -55,6 +61,9 @@ namespace ShaipAgency
             services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddTransient<ITestModelService, TestModelServiceUsingEF>();
             services.AddTransient<TestModelServiceDirectAccessDb>();
+
+            /* 기준정보 입출력을 위한 서비스 */
+            services.AddTransient<RequestCodeService>();
             
 
             services.AddDocumentMetadata((serviceProvider, registrator) => {

@@ -66,6 +66,7 @@
     <Build Include="dbo\Tables\UserPassbook.sql" />
     <Build Include="dbo\Stored Procedures\UserPassbook_Sel_01.sql" />
     <Build Include="dbo\Tables\AspNetUsers.sql" />
+    <Build Include="dbo\Tables\STD_REQUEST_CODE.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="ShaipAgency.MSSQLDB.refactorlog" />

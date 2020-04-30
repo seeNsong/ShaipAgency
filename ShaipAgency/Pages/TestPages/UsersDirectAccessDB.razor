@@ -115,82 +115,6 @@ else
 }
 
 
-
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" @onclick="btnCreate_Click">
-    모달팝업
-</button>
-@if (isShow)
-{
-
-    <div class="modal fade show" style="display:block" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-
-                    @* JavaScript closing
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="document.getElementById('exampleModal').style.display='none'">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    *@
-
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <EditForm Model="@starship" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit" Context="EditFormContext">
-                        <DataAnnotationsValidator />
-                        <DxFormLayout>
-                            <DxFormLayoutItem Caption="Identifier:" ColSpanMd="6">
-                                <Template>
-                                    <DxTextBox @bind-Text="@starship.Identifier" />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="Primary Classification:" ColSpanMd="6">
-                                <Template>
-                                    <DxComboBox NullText="Select classification ..."
-                                                ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                                                @bind-SelectedItem="@starship.Classification"
-                                                Data="@(new List<string>() { "Defense", "Exploration", "Diplomacy" })" />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="Maximum Accommodation:" ColSpanMd="6">
-                                <Template>
-                                    <DxSpinEdit Id="accommodation" @bind-Value="@starship.MaximumAccommodation" />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="Production Date:" ColSpanMd="6">
-                                <Template>
-                                    <DxDateEdit @bind-Date="@starship.ProductionDate" />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem ColSpanMd="12">
-                                <Template>
-                                    <ValidationSummary />
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem ColSpanMd="12">
-                                <Template>
-                                    <DxButton SubmitFormOnClick="true" Text="Submit" RenderStyle="@ButtonRenderStyle.Secondary" />
-                                </Template>
-                            </DxFormLayoutItem>
-                        </DxFormLayout>
-                    </EditForm>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-}
-
-
-
 @code {
 
     private IList<ApplicationUser> applicationUsers;
@@ -207,55 +131,8 @@ else
 
         testModels = await TestModelServiceDirectAccessDb.GetTestModelsByQueryAsync();
         testModelsEnum = await TestModelServiceDirectAccessDb.GetTestModelsByQueryAsyncEnum();
-
-        ;
-
+              
     }
 
-    // DevExpress Modal 예제용
-    #region
-    private bool isShow = false;
-    private void btnCreate_Click()
-    {
-        isShow = true;
-    }
-
-    private Starship starship = new Starship();
-
-    private void HandleValidSubmit()
-    {
-        Console.WriteLine("OnValidSubmit");
-    }
-    private void HandleInvalidSubmit()
-    {
-        Console.WriteLine("OnInvalidSubmit");
-    }
-
-    public class Starship
-    {
-        [Required]
-        [StringLength(16,
-        ErrorMessage = "The Identifier exceeds 16 characters.")]
-        public string Identifier { get; set; }
-
-        [Required]
-        public string Classification { get; set; }
-
-        [Range(1, 100000, ErrorMessage = "The Maximum Accommodation value should be a number between 1 and 100,000.")]
-        public int MaximumAccommodation { get; set; }
-
-        [Required]
-        [DateInPastAttribute(ErrorMessage = "The Production Date value cannot be later than today.")]
-        public DateTime ProductionDate { get; set; }
-    }
-
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
-    public class DateInPastAttribute : ValidationAttribute
-    {
-        public override bool IsValid(object value)
-        {
-            return (DateTime)value <= DateTime.Today;
-        }
-    }
-    #endregion
+    
 }

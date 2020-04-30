@@ -12,12 +12,15 @@ using System.Threading;
 namespace ShaipAgency.Data.Test
 {
     public class TestModelServiceDirectAccessDb
-    {
-        IConfiguration _configuration;
+    {        
+        string _dbConnectionString;
+        //IConfiguration _configuration;
 
         public TestModelServiceDirectAccessDb(IConfiguration configurtion)
         {
-            _configuration = configurtion;
+            //_configuration = configurtion;
+            _dbConnectionString = configurtion[configurtion["DbMode"]];
+            
         }
 
         public async Task<List<TestModel>> GetTestModelsByQueryAsync()
@@ -26,7 +29,7 @@ namespace ShaipAgency.Data.Test
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("LocalDbConnection")))
+                using (SqlConnection conn = new SqlConnection(_dbConnectionString))
                 {
                     await conn.OpenAsync();
                     using (SqlCommand command = new SqlCommand("SELECT RequestNo, UserId, Charge, CDateTime From UserPassbook WITH(NOLOCK)", conn))
@@ -57,7 +60,7 @@ namespace ShaipAgency.Data.Test
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("LocalDBConnection")))
+                using (SqlConnection conn = new SqlConnection(_dbConnectionString))
                 {
                     await conn.OpenAsync();
 
@@ -97,7 +100,7 @@ namespace ShaipAgency.Data.Test
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("LocalDbConnection")))
+                using (SqlConnection conn = new SqlConnection(_dbConnectionString))
                 {
                     await conn.OpenAsync();
                     using (SqlCommand command = new SqlCommand("SELECT RequestNo, UserId, Charge, CDateTime From UserPassbook WITH(NOLOCK)", conn))

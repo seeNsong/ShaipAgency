@@ -1,11 +1,12 @@
 ﻿
 <AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage" target="_parent">@context.User.Identity.Name!</a>        
+        <Balance />
+        <a href="Identity/Account/Manage" target="_parent">@context.User.Identity.Name!</a>
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">로그아웃</button>
         </form>
-        
+
     </Authorized>
     <NotAuthorized>
         <a href="Identity/Account/Register">회원가입</a>

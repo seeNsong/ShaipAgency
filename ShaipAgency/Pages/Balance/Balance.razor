@@ -1,0 +1,51 @@
+﻿
+
+
+<div class="dropdown">
+    <button class="btn btn-link dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        예치금
+    </button>
+
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+        <button class="dropdown-item btn-link" @onclick="@ToggleBalanceDepositDialog">예치금 충전</button>
+        <button class="dropdown-item btn-link" href="#">예치금 사용현황</button>
+        <button class="dropdown-item btn-link" href="#">예치금 환불</button>
+    </div>
+</div>
+
+
+<MatDialog @bind-IsOpen="@balanceDepositShown">
+    <MatDialogTitle>Title</MatDialogTitle>
+    <MatDialogContent>
+        @*<p>What's your favorite animal?</p>
+        <MatTextField @bind-Value="@textDefault"></MatTextField>*@
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Example textarea</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+        </div>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@(e => { balanceDepositShown = false; })">No Thanks</MatButton>
+        <MatButton OnClick="@BalanceDeposit_ClickOK">OK</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+
+@code {
+    bool balanceDepositShown = false;
+
+    void ToggleBalanceDepositDialog()
+    {
+        balanceDepositShown = !balanceDepositShown;
+    }
+
+    string textDefault = "textDefault";
+
+    void BalanceDeposit_ClickOK()
+    {
+        // OK 처리
+        balanceDepositShown = false;
+    }
+
+}

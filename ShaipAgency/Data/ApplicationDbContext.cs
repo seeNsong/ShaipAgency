@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ShaipAgency.Model;
+using ShaipAgency.Model.Standards;
 
 namespace ShaipAgency.Data
 {
@@ -17,5 +18,6 @@ namespace ShaipAgency.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+        public DbSet<RequestCodeModel> STD_REQUEST_CODE { get; set; }
     }
 }
