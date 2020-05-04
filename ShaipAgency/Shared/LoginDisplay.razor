@@ -1,7 +1,10 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+
 <AuthorizeView>
     <Authorized>
-        <Balance />
+        <ReqDeposit userId="@UserManager.GetUserId(context.User)" />
         <a href="Identity/Account/Manage" target="_parent">@context.User.Identity.Name!</a>
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">로그아웃</button>

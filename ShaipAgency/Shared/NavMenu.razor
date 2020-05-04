@@ -60,16 +60,19 @@
         </DxTreeViewNode>
         <DxTreeViewNode Text="기준정보관리">
             <Nodes>
-                <DxTreeViewNode Text="STD_REQUEST_CODE" NavigateUrl="Standards/RequestCodeManage"></DxTreeViewNode>                
+                <DxTreeViewNode Text="TB_STD_REQUEST_CODE" NavigateUrl="Standards/RequestCodeManage"></DxTreeViewNode>
+                <DxTreeViewNode Text="TB_STD_REQUEST_STATUS_CODE" NavigateUrl="/Standards/RequestStatusCodeManage"></DxTreeViewNode>
+                <DxTreeViewNode Text="TB_STD_REQUEST_STATUS_ROUTE_INFO" NavigateUrl="/Standards/RequestStatusRouteInfoManage"></DxTreeViewNode>
+                <DxTreeViewNode Text="TB_STD_EVENT_CODE" NavigateUrl="/Standards/EventCodeManage"></DxTreeViewNode>
+                
             </Nodes>
         </DxTreeViewNode>
         <DxTreeViewNode Text="서비스소개" NavigateUrl="">
         </DxTreeViewNode>
         <DxTreeViewNode Text="서비스신청" NavigateUrl="">
-            <Nodes>
-                <DxTreeViewNode Text="[DB] EF사용" NavigateUrl="TestPages/UsersUsingEF"></DxTreeViewNode>
-                <DxTreeViewNode Text="[DB] DIRECT ACCESS" NavigateUrl="TestPages/UsersDirectAccessDB"></DxTreeViewNode>
-            </Nodes>
+            @*<Nodes>
+                
+            </Nodes>*@
         </DxTreeViewNode>
         <DxTreeViewNode Text="부가서비스" NavigateUrl="">
         </DxTreeViewNode>
@@ -92,7 +95,7 @@
         <DxTreeViewNode Text="테스트페이지">
             <Nodes>
                 <DxTreeViewNode Text="Fetch Data" NavigateUrl="fetchdata"></DxTreeViewNode>
-                <DxTreeViewNode Text="Test Component" NavigateUrl="TestComponent"></DxTreeViewNode>
+                <DxTreeViewNode Text="Test Component" NavigateUrl="/TestPages/TestComponent"></DxTreeViewNode>
             </Nodes>
         </DxTreeViewNode>
         <DxTreeViewNode Text="Overview" NavigateUrl="/DevExpressDemo/Overview">

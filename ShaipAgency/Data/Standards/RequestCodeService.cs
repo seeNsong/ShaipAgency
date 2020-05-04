@@ -26,16 +26,16 @@ namespace ShaipAgency.Data.Standards
         /// <returns></returns>
         public async Task<int> Add(IDictionary<string, object> newRequestCode)
         {
-            var requestCode = new RequestCodeModel()
+            var requestCode = new StdRequestCodeModel()
             {
                 RequestCode = newRequestCode["RequestCode"].ToString(),
                 RequestName = newRequestCode["RequestName"].ToString(),
-                UseYN = newRequestCode["UseYN"].ToString(),
-                UserId = int.Parse(newRequestCode["UserId"].ToString()),
+                UseYN = (bool)newRequestCode["UseYN"],
+                CreationUserId = int.Parse(newRequestCode["CreationUserId"].ToString()),
                 CreationDateTime = DateTime.Parse(newRequestCode["CreationDateTime"].ToString())
             };
 
-            _context.STD_REQUEST_CODE.Add(requestCode);
+            _context.TB_STD_REQUEST_CODE.Add(requestCode);
             return (await _context.SaveChangesAsync());
         }
 
@@ -44,9 +44,9 @@ namespace ShaipAgency.Data.Standards
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public async  Task<IEnumerable<RequestCodeModel>> ToList(CancellationToken ct = default)
+        public async  Task<IEnumerable<StdRequestCodeModel>> ToList(CancellationToken ct = default)
         {
-            var List = await _context.STD_REQUEST_CODE.ToListAsync();
+            var List = await _context.TB_STD_REQUEST_CODE.ToListAsync();
             return List.AsEnumerable();
         }
 
@@ -56,15 +56,22 @@ namespace ShaipAgency.Data.Standards
         /// <param name="requestCode"></param>
         /// <param name="newRequestCode"></param>
         /// <returns></returns>
-        public async Task<int> Update(RequestCodeModel requestCode, IDictionary<string, object> newRequestCode)
+        public async Task<int> Update(StdRequestCodeModel requestCode, IDictionary<string, object> newRequestCode)
         {
             // Key는 Update하지 않음
             //requestCode.RequestCode = newRequestCode["RequestCode"].ToString();
-            requestCode.RequestName = newRequestCode["RequestName"].ToString();
-            requestCode.UseYN = newRequestCode["UseYN"].ToString();
-            requestCode.UserId = int.Parse(newRequestCode["UserId"].ToString());
-            requestCode.CreationDateTime = DateTime.Parse(newRequestCode["CreationDateTime"].ToString());
-            _context.STD_REQUEST_CODE.Update(requestCode);
+            foreach (var column in newRequestCode)
+            {
+                if(column.Key.Equals("RequestName"))
+                    requestCode.RequestName = newRequestCode["RequestName"].ToString();
+                else if (column.Key.Equals("UseYN"))
+                    requestCode.UseYN = (bool)newRequestCode["UseYN"];
+                else if (column.Key.Equals("CreationUserId"))
+                    requestCode.CreationUserId = int.Parse(newRequestCode["CreationUserId"].ToString());
+                else if (column.Key.Equals("CreationDateTime"))
+                    requestCode.CreationDateTime = DateTime.Parse(newRequestCode["CreationDateTime"].ToString());
+            }
+            _context.TB_STD_REQUEST_CODE.Update(requestCode);
             return (await _context.SaveChangesAsync());
         }
 
@@ -73,12 +80,12 @@ namespace ShaipAgency.Data.Standards
         /// </summary>
         /// <param name="requestCode"></param>
         /// <returns></returns>
-        public async Task<int> Remove(RequestCodeModel requestCode)
+        public async Task<int> Remove(StdRequestCodeModel requestCode)
         {
             //_context.Remove(requestCode);
             //return (await _context.SaveChangesAsync());
-            requestCode.UseYN = "false";
-            _context.STD_REQUEST_CODE.Update(requestCode);
+            requestCode.UseYN = false;
+            _context.TB_STD_REQUEST_CODE.Update(requestCode);
             return await _context.SaveChangesAsync();
         }
 

@@ -1,14 +1,16 @@
 ﻿@page "/Standards/RequestCodeManage"
+@*@attribute [Authorize]*@
+
 @using ShaipAgency.Model.Standards
 @inject RequestCodeService RequestCodeService
 
-<h3>Request Code List</h3>
+<h3>의뢰코드</h3>
 @if (requestCodeList != null)
 {
-    <div class="row col-6">
-        @*<DxDataGrid DataAsync="@RequestCodeService.ToList"*@
-        <DxDataGrid Data="@requestCodeList"
-                    PageSize="20"
+    <div class="row col-12">
+        @*<DxDataGrid Data="@requestCodeList"*@
+        <DxDataGrid DataAsync="@RequestCodeService.ToList"
+                    PageSize="30"
                     ShowFilterRow="false"
                     RowRemovingAsync="@OnRowRemoving"
                     RowUpdatingAsync="@OnRowUpdating"
@@ -16,11 +18,11 @@
                     InitNewRow="@OnInitNewRow"
                     style="width:100%">
             <DxDataGridCommandColumn Width="100px" DeleteButtonVisible="false" />
-            <DxDataGridColumn Field="@nameof(RequestCodeModel.RequestCode)" Caption="RequestCode" Width="100px" AllowSort="DefaultBoolean.True" />
-            <DxDataGridColumn Field="@nameof(RequestCodeModel.RequestName)" Caption="RequestName" Width="200px" AllowSort="DefaultBoolean.True" />
-            <DxDataGridCheckBoxColumn Field="@nameof(RequestCodeModel.UseYN)" Caption="UseYN" Width="50px" AllowSort="DefaultBoolean.True" />
-            <DxDataGridColumn Field="@nameof(RequestCodeModel.UserId)" Caption="UserId" Width="100px" />
-            <DxDataGridDateEditColumn Field="@nameof(RequestCodeModel.CreationDateTime)" DisplayFormatString="g" EditorVisible="DefaultBoolean.False" />
+            <DxDataGridColumn Field="@nameof(StdRequestCodeModel.RequestCode)" Caption="의뢰코드" Width="100px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestCodeModel.RequestName)" Caption="의뢰명" Width="200px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridCheckBoxColumn Field="@nameof(StdRequestCodeModel.UseYN)" Caption="UseYN" Width="50px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestCodeModel.CreationUserId)" Caption="UserId" Width="100px" />
+            <DxDataGridDateEditColumn Field="@nameof(StdRequestCodeModel.CreationDateTime)" DisplayFormatString="g" EditorVisible="DefaultBoolean.False" />
         </DxDataGrid>
     </div>
 
@@ -59,7 +61,7 @@
                             </MatExpansionPanelSummary>
                             <MatExpansionPanelDetails>
                                 <DxCheckBox Checked="@requestCode.UseYN"></DxCheckBox>
-                                <span>UserId : @requestCode.UserId</span>
+                                <span>UserId : @requestCode.CreationUserId</span>
 
                             </MatExpansionPanelDetails>
 
@@ -99,7 +101,7 @@
 @code {
 
 
-    IEnumerable<RequestCodeModel> requestCodeList;
+    IEnumerable<StdRequestCodeModel> requestCodeList;
 
     protected override async Task OnInitializedAsync()
     {
@@ -128,24 +130,25 @@
 
 
     #region DxDataGrid
-    async Task OnRowRemoving(RequestCodeModel requestCode)
+    async Task OnRowRemoving(StdRequestCodeModel requestCode)
     {
         await RequestCodeService.Remove(requestCode);
     }
-    async Task OnRowUpdating(RequestCodeModel requestCode, IDictionary<string, object> newRequestCode)
+    async Task OnRowUpdating(StdRequestCodeModel requestCode, IDictionary<string, object> newRequestCode)
     {
         await RequestCodeService.Update(requestCode, newRequestCode);
     }
     async Task OnRowInserting(IDictionary<string, object> newRequestCode)
     {
         await RequestCodeService.Add(newRequestCode);
+        await RequestCodeService.ToList();
     }
     Task OnInitNewRow(Dictionary<string, object> values)
     {
 
-        values.Add("UseId", 1);
+        values.Add("CreationUserId", 1);
         values.Add("CreationDateTime", DateTime.Now);
-        values.Add("UseYN", "true");
+        values.Add("UseYN", true);
 
 
         return Task.CompletedTask;

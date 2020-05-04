@@ -110,3 +110,9 @@ div.logo {
 .sign-top-row.auth {
     justify-content: space-between;
 }
+
+
+/* MatBlazor*/
+.MatDialog-500px{
+    width: 500px
+}

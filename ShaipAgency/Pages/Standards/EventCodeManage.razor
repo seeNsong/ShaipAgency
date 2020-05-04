@@ -1,0 +1,61 @@
+﻿@page "/Standards/EventCodeManage"
+@*@attribute [Authorize]*@
+
+@using ShaipAgency.Model.Standards
+@inject EventCodeService EventCodeService
+
+<h3>Event Code List</h3>
+@if (codeList != null)
+{
+    <div class="row col-12">
+        
+        <DxDataGrid DataAsync="@EventCodeService.ToList"
+                    PageSize="30"
+                    ShowFilterRow="false"                    
+                    RowUpdatingAsync="@OnRowUpdating"
+                    RowInsertingAsync="@OnRowInserting"
+                    InitNewRow="@OnInitNewRow"
+                    style="width:100%">
+            <DxDataGridCommandColumn Width="100px" DeleteButtonVisible="false" />
+            <DxDataGridColumn Field="@nameof(StdEventCodeModel.EventCode)" Caption="EventCode" Width="100px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdEventCodeModel.EventName)" Caption="EventName" Width="200px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridCheckBoxColumn Field="@nameof(StdEventCodeModel.UseYN)" Caption="UseYN" Width="50px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdEventCodeModel.EventDescription)" Caption="EventDescription" Width="300px" AllowSort="DefaultBoolean.True" />
+
+        </DxDataGrid>
+    </div>
+}
+@code {
+
+
+    IEnumerable<StdEventCodeModel> codeList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        codeList = await EventCodeService.ToList();
+    }
+
+    #region DxDataGrid
+    async Task OnRowRemoving(StdEventCodeModel targetRow)
+    {
+        await EventCodeService.Remove(targetRow);
+    }
+    async Task OnRowUpdating(StdEventCodeModel targetRow, IDictionary<string, object> newRow)
+    {
+        await EventCodeService.Update(targetRow, newRow);
+    }
+    async Task OnRowInserting(IDictionary<string, object> newRow)
+    {
+        await EventCodeService.Add(newRow);
+        //await EventCodeService.ToList();
+    }
+    Task OnInitNewRow(Dictionary<string, object> newRow)
+    {
+        newRow.Add("UseYN", true);
+        return Task.CompletedTask;
+    }
+    #endregion DxDataGrid
+
+
+}
+

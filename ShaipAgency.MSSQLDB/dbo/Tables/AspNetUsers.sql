@@ -14,7 +14,7 @@
     [LockoutEnd]           DATETIMEOFFSET (7) NULL,
     [LockoutEnabled]       BIT                NOT NULL,
     [AccessFailedCount]    INT                NOT NULL,
-    [ShaipName]            NVARCHAR (MAX)     NULL,
+    [ShaipName]            NVARCHAR (20)      NULL,
     [IsWithdraw]           BIT                NOT NULL,
     CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
 );

@@ -5,10 +5,10 @@
 @using System
 @using System.ComponentModel.DataAnnotations
 @using DevExpress.Blazor
-@using Microsoft.AspNetCore.Identity
 
+@using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> UserManager
-@inject AuthenticationStateProvider AuthenticationStateProvider
+
 
 @if (applicationUsers == null)
 {
@@ -142,5 +142,5 @@ else
 
     }
 
-   
+
 }

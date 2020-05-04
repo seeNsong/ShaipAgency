@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShaipAgency.Data;
 
 namespace ShaipAgency.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200504154708_001")]
+    partial class _001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,12 +250,7 @@ namespace ShaipAgency.Migrations
                         .HasColumnName("PersonName")
                         .HasColumnType("Nvarchar(20)");
 
-                    b.Property<string>("RequestStatusCode")
-                        .HasColumnType("char(2)");
-
                     b.HasKey("RequestNo");
-
-                    b.HasIndex("RequestStatusCode");
 
                     b.ToTable("TB_REQ_DETAILS_DEPOSIT");
                 });
@@ -564,10 +561,6 @@ namespace ShaipAgency.Migrations
                         .HasForeignKey("RequestNo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ShaipAgency.Model.Standards.StdRequestStatusCodeModel", "StdRequestStatusCodeModel")
-                        .WithMany("ReqDetailsDepositModel")
-                        .HasForeignKey("RequestStatusCode");
                 });
 
             modelBuilder.Entity("ShaipAgency.Model.Request.ReqMastersModel", b =>
