@@ -3,16 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>ShaipAgency.MSSQLDB</Name>
+    <Name>ShaipAgency.MSSqlDb</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{0097b838-ba94-43c3-a683-e00c9166b5eb}</ProjectGuid>
+    <ProjectGuid>{80c763f1-4d50-47cc-a8c8-de6866b0acc1}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>ShaipAgency.MSSQLDB</RootNamespace>
-    <AssemblyName>ShaipAgency.MSSQLDB</AssemblyName>
+    <RootNamespace>ShaipAgency.MSSqlDb</RootNamespace>
+    <AssemblyName>ShaipAgency.MSSqlDb</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -59,20 +59,32 @@
     <Folder Include="dbo" />
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\Stored Procedures" />
-    <Folder Include="PublishLocations" />
-    <Folder Include="PostPublishScripts" />
+    <Folder Include="dbo\Functions" />
+    <Folder Include="Scripts" />
+    <Folder Include="Publish" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\UserPassbook.sql" />
-    <Build Include="dbo\Stored Procedures\UserPassbook_Sel_01.sql" />
+    <Build Include="dbo\Tables\AspNetUsers.sql" />
+    <Build Include="dbo\Functions\UFN_GET_REQUEST_NO.sql" />
+    <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
+    <Build Include="dbo\Stored Procedures\USP_SHAIP_TEMPLATE.sql" />
+    <Build Include="dbo\Tables\TB_STD_REQUEST_STATUS_ROUTE_INFO.sql" />
+    <Build Include="dbo\Functions\UFN_GET_NEXT_STATUS.sql" />
+    <Build Include="dbo\Stored Procedures\USP_REQ_DEPOSIT_MOD_01.sql" />
+    <Build Include="dbo\Stored Procedures\USP_EXE_TB_USER_ACTIVITY_UPDATE.sql" />
+    <Build Include="dbo\Stored Procedures\USP_EXE_USER_PASSBOOK_UPDATE.sql" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="ShaipAgency.MSSQLDB.refactorlog" />
+    <Build Include="dbo\Tables\TB_REQ_DETAILS_DEPOSIT.sql" />
+    <Build Include="dbo\Tables\TB_REQ_MASTERS.sql" />
+    <Build Include="dbo\Tables\TB_REQ_TIMESTAMPS.sql" />
+    <Build Include="dbo\Tables\TB_STD_EVENT_CODE.sql" />
+    <Build Include="dbo\Tables\TB_STD_REQUEST_CODE.sql" />
+    <Build Include="dbo\Tables\TB_STD_REQUEST_STATUS_CODE.sql" />
+    <Build Include="dbo\Tables\TB_USER_ACTIVITY.sql" />
+    <Build Include="dbo\Tables\TB_USER_PASSBOOK.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PublishLocations\LocalDB.ShaipAgency.MSSQLDB.publish.publish.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="PostPublishScripts\Script.PostDeployUserPassbook.sql" />
+    <None Include="Publish\LocalDb.publish.xml" />
   </ItemGroup>
 </Project>

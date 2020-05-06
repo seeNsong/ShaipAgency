@@ -19,10 +19,12 @@ namespace ShaipAgency.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -46,7 +48,7 @@ namespace ShaipAgency.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,9 +61,8 @@ namespace ShaipAgency.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -70,7 +71,7 @@ namespace ShaipAgency.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,9 +84,8 @@ namespace ShaipAgency.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -94,7 +94,7 @@ namespace ShaipAgency.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(128)")
@@ -107,9 +107,8 @@ namespace ShaipAgency.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -118,13 +117,13 @@ namespace ShaipAgency.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -133,10 +132,10 @@ namespace ShaipAgency.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(128)")
@@ -156,8 +155,10 @@ namespace ShaipAgency.Migrations
 
             modelBuilder.Entity("ShaipAgency.Model.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -171,6 +172,9 @@ namespace ShaipAgency.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWithdraw")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -200,7 +204,8 @@ namespace ShaipAgency.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShaipName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("ShaipName")
+                        .HasColumnType("Nvarchar(20)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -222,16 +227,295 @@ namespace ShaipAgency.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("ShaipAgency.Model.Request.ReqDetailsDepositModel", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.Property<string>("RequestNo")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnName("AccountNumber")
+                        .HasColumnType("Nvarchar(40)");
+
+                    b.Property<int>("Amount")
+                        .HasColumnName("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DepositDate")
+                        .HasColumnName("DepositDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("PersonName")
+                        .HasColumnName("PersonName")
+                        .HasColumnType("Nvarchar(20)");
+
+                    b.Property<string>("RequestStatusCode")
+                        .HasColumnType("char(2)");
+
+                    b.HasKey("RequestNo");
+
+                    b.HasIndex("RequestStatusCode");
+
+                    b.ToTable("TB_REQ_DETAILS_DEPOSIT");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.Request.ReqMastersModel", b =>
+                {
+                    b.Property<string>("RequestNo")
+                        .HasColumnName("RequestNo")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnName("CreationDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DeliveryGroupNo")
+                        .IsRequired()
+                        .HasColumnName("DeliveryGroupNo")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<int>("DetailCount")
+                        .HasColumnName("DetailCount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationDateTime")
+                        .HasColumnName("ModificationDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("RemainClaims")
+                        .HasColumnName("RemainClaims")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequestCode")
+                        .HasColumnType("Char(2)");
+
+                    b.Property<string>("RequestTitle")
+                        .HasColumnName("RequestTitle")
+                        .HasColumnType("Nvarchar(256)");
+
+                    b.Property<int>("RequestUserId")
+                        .HasColumnName("RequestUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RequestNo");
+
+                    b.HasIndex("RequestCode");
+
+                    b.ToTable("TB_REQ_MASTERS");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.Request.ReqTimestampsModel", b =>
+                {
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnName("Timestamp")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("DetailNo")
+                        .HasColumnName("DetailNo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EventCode")
+                        .HasColumnName("EventCode")
+                        .HasColumnType("char(2)");
+
+                    b.Property<string>("RequestNo")
+                        .HasColumnName("RequestNo")
+                        .HasColumnType("varchar(15)");
+
+                    b.HasKey("Timestamp");
+
+                    b.ToTable("TB_REQ_TIMESTAMPS");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.Standards.StdEventCodeModel", b =>
+                {
+                    b.Property<string>("EventCode")
+                        .HasColumnName("EventCode")
+                        .HasColumnType("char(2)");
+
+                    b.Property<string>("EventDescription")
+                        .HasColumnName("EventDescription")
+                        .HasColumnType("Nvarchar(256)");
+
+                    b.Property<string>("EventName")
+                        .IsRequired()
+                        .HasColumnName("EventName")
+                        .HasColumnType("Nvarchar(20)");
+
+                    b.Property<bool>("UseYN")
+                        .HasColumnName("UseYN")
+                        .HasColumnType("bit");
+
+                    b.HasKey("EventCode");
+
+                    b.ToTable("TB_STD_EVENT_CODE");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.Standards.StdRequestCodeModel", b =>
+                {
+                    b.Property<string>("RequestCode")
+                        .HasColumnName("RequestCode")
+                        .HasColumnType("Char(2)");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnName("CreationDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("CreationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequestName")
+                        .IsRequired()
+                        .HasColumnName("RequestName")
+                        .HasColumnType("NvarChar(20)");
+
+                    b.Property<bool>("UseYN")
+                        .HasColumnName("UseYN")
+                        .HasColumnType("bit");
+
+                    b.HasKey("RequestCode");
+
+                    b.ToTable("TB_STD_REQUEST_CODE");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.Standards.StdRequestStatusCodeModel", b =>
+                {
+                    b.Property<string>("RequestStatusCode")
+                        .HasColumnName("RequestStatusCode")
+                        .HasColumnType("char(2)");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnName("CreationDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("CreationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestAlertPriority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequestStatusName")
+                        .IsRequired()
+                        .HasColumnName("RequestStatusName")
+                        .HasColumnType("NvarChar(20)");
+
+                    b.Property<bool>("UseYN")
+                        .HasColumnName("UseYN")
+                        .HasColumnType("bit");
+
+                    b.HasKey("RequestStatusCode");
+
+                    b.ToTable("TB_STD_REQUEST_STATUS_CODE");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.Standards.StdRequestStatusRouteInfoModel", b =>
+                {
+                    b.Property<string>("RequestCode")
+                        .HasColumnType("Char(2)");
+
+                    b.Property<string>("EventCode")
+                        .HasColumnType("char(2)");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnName("CreationDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("CreationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NextStatusCode")
+                        .HasColumnType("char(2)");
+
+                    b.HasKey("RequestCode", "EventCode");
+
+                    b.HasIndex("EventCode");
+
+                    b.HasIndex("NextStatusCode");
+
+                    b.ToTable("TB_STD_REQUEST_STATUS_ROUTE_INFO");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.User.UserActivityModel", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BacktoBackCancellationCount")
+                        .HasColumnName("BacktoBackCancellationCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Blocked")
+                        .HasColumnName("Blocked")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CancellationCount")
+                        .HasColumnName("CancellationCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Grade")
+                        .HasColumnName("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastSignInDateTime")
+                        .HasColumnName("LastSignInDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("RequestCount")
+                        .HasColumnName("RequestCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SignUpDateTime")
+                        .HasColumnName("SignUpDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("WithdrawalDateTime")
+                        .HasColumnName("WithdrawalDateTime")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("TB_USER_ACTIVITY");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.User.UserPassbookModel", b =>
+                {
+                    b.Property<string>("RequestNo")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("EventCode")
+                        .HasColumnType("char(2)");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnName("CreationDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RequestNo", "EventCode");
+
+                    b.HasIndex("EventCode");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TB_USER_PASSBOOK");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.HasOne("ShaipAgency.Model.ApplicationUser", null)
                         .WithMany()
@@ -240,7 +524,7 @@ namespace ShaipAgency.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.HasOne("ShaipAgency.Model.ApplicationUser", null)
                         .WithMany()
@@ -249,9 +533,9 @@ namespace ShaipAgency.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -264,10 +548,79 @@ namespace ShaipAgency.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.HasOne("ShaipAgency.Model.ApplicationUser", null)
                         .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.Request.ReqDetailsDepositModel", b =>
+                {
+                    b.HasOne("ShaipAgency.Model.Request.ReqMastersModel", "ReqMastersModel")
+                        .WithMany("ReqDetailsDepositModel")
+                        .HasForeignKey("RequestNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShaipAgency.Model.Standards.StdRequestStatusCodeModel", "StdRequestStatusCodeModel")
+                        .WithMany("ReqDetailsDepositModel")
+                        .HasForeignKey("RequestStatusCode");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.Request.ReqMastersModel", b =>
+                {
+                    b.HasOne("ShaipAgency.Model.Standards.StdRequestCodeModel", "StdRequestCodeModel")
+                        .WithMany("ReqMastersModel")
+                        .HasForeignKey("RequestCode");
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.Standards.StdRequestStatusRouteInfoModel", b =>
+                {
+                    b.HasOne("ShaipAgency.Model.Standards.StdEventCodeModel", "StdEventCodeModel")
+                        .WithMany("StdRequestStatusRouteInfoModel")
+                        .HasForeignKey("EventCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShaipAgency.Model.Standards.StdRequestStatusCodeModel", "StdRequestStatusCodeModel")
+                        .WithMany("StdRequestStatusRouteInfoModel")
+                        .HasForeignKey("NextStatusCode");
+
+                    b.HasOne("ShaipAgency.Model.Standards.StdRequestCodeModel", "StdRequestCodeModel")
+                        .WithMany("StdRequestStatusRouteInfoModel")
+                        .HasForeignKey("RequestCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.User.UserActivityModel", b =>
+                {
+                    b.HasOne("ShaipAgency.Model.ApplicationUser", "ApplicationUser")
+                        .WithMany("UserActivityModel")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ShaipAgency.Model.User.UserPassbookModel", b =>
+                {
+                    b.HasOne("ShaipAgency.Model.Standards.StdEventCodeModel", "StdEventCodeModel")
+                        .WithMany("UserPassbookModel")
+                        .HasForeignKey("EventCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShaipAgency.Model.Request.ReqMastersModel", "ReqMastersModel")
+                        .WithMany("UserPassbookModel")
+                        .HasForeignKey("RequestNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShaipAgency.Model.ApplicationUser", "ApplicationUser")
+                        .WithMany("UserPassbookModel")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

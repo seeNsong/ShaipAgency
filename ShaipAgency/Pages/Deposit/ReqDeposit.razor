@@ -1,0 +1,308 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IMatToaster Toaster
+@inject ApplicationDbContext dbContext
+@inject DepositService DepositService
+
+
+@using Microsoft.AspNetCore.Identity
+@using ShaipAgency.Data.Deposits 
+
+
+<div class="dropdown">
+    <button class="btn btn-link dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        예치금
+    </button>
+
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <button class="dropdown-item btn-link" @onclick="Open">예치금 충전</button>
+        <button class="dropdown-item btn-link" href="#">예치금 사용현황</button>
+        <button class="dropdown-item btn-link" href="#">예치금 환불</button>
+    </div>
+</div>
+
+
+<MatDialog @bind-IsOpen="@dialogIsOpen">
+    <div class="modal" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display:block">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">예치금 충전/환불 신청</h5>
+                    @*<button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="() => toggle()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>*@
+                </div>
+                <div class="modal-body">
+
+                    <p> 보유 예치금 : @currentDeposit  </p>
+                    <p>
+                        <label>충전/환불 선택 : </label>
+                        <DxComboBox Data="@requestItems"
+                                    TextFieldName="RequestName"
+                                    SelectedItem="@selectedItem"
+                                    SelectedItemChanged="@selectedItemChanged"></DxComboBox>
+                    </p>
+                    <EditForm Model="@editFormModel" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+                        <DataAnnotationsValidator />
+
+                        @if (selectedItem.RequestName.Contains("충전"))
+                        {
+
+                            <p>
+                                <label for="amount">충전금액 : </label>
+                                <DxSpinEdit Id="amount" @bind-Value="@editFormModel.Amount" @onclick="(e => { editFormModel.Amount = string.Empty; })" />
+                                <ValidationMessage For="@(() => editFormModel.Amount)" />
+                            </p>
+
+                            <p>
+                                <label for="depositDate">입금일 : </label>
+                                <DxDateEdit Format="yyyy-MM-dd" @bind-Date="@editFormModel.DepositDate" />
+                                <ValidationMessage For="@(() => editFormModel.DepositDate)" />
+                            </p>
+                            <p>
+                                <label for="personName">입금자명 : </label>
+                                <DxTextBox Id="personName" @bind-Text="@editFormModel.PersonName" />
+                                <ValidationMessage For="@(() => editFormModel.PersonName)" />
+                            </p>
+                        }
+                        else if (selectedItem.RequestName.Contains("환불"))
+                        {
+
+                            <p>
+                                <label for="amount">환불요청액 : </label>
+                                <DxSpinEdit Id="amount" @bind-Value="@editFormModel.Amount" />
+                                <ValidationMessage For="@(() => editFormModel.Amount)" />
+                            </p>
+                            <p>
+                                <label for="accountNumber">출금계좌번호 : </label>
+                                <DxTextBox Id="accountNumber" @bind-Text="@editFormModel.AccountNumber" />
+                                <ValidationMessage For="@(() => editFormModel.AccountNumber)" />
+                            </p>
+                            <p>
+                                <label for="personName">출금계좌성함</label>
+                                <DxTextBox Id="personName" @bind-Text="@editFormModel.PersonName" />
+                                <ValidationMessage For="@(() => editFormModel.PersonName)" />
+                            </p>
+                        }
+
+
+                        <div class="text-right">
+                            <DxButton Click="@(e=>{dialogIsOpen = !dialogIsOpen; InvokeAsync(StateHasChanged);})" Text="취소" RenderStyle="@ButtonRenderStyle.Secondary" />
+                            <DxButton SubmitFormOnClick="true" Text="신청" RenderStyle="@ButtonRenderStyle.Primary" />
+                        </div>
+
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <p>예치금 입금 계좌 안내 : 우리은행 김성민 1002-751-324961</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</MatDialog>
+
+@code {
+
+    [Parameter]
+    public string userId { get; set; }
+
+    bool dialogIsOpen = false;
+    string currentDeposit = string.Empty;
+
+    IEnumerable<StdRequestCodeModel> requestItems;
+    StdRequestCodeModel selectedItem;
+    EditFormModel editFormModel = new EditFormModel();
+
+
+    public void Open()
+    {
+        //// 모달 오픈 시 기본값 "충전" 선택
+        if (requestItems.Count() > 0)
+            selectedItem = requestItems.ElementAt(0);
+
+        // 사용자정보 불러오기, 의뢰요청코드/명칭 불러오기 (SP)
+
+        editFormModel.PersonName = string.Empty;
+        editFormModel.Amount = string.Empty;
+        editFormModel.AccountNumber = "0";
+        editFormModel.DepositDate = DateTime.Today;
+
+
+        currentDeposit = (1324134).ToString("###,###,###");
+
+
+        dialogIsOpen = true;
+        StateHasChanged();
+    }
+
+
+    /// <summary>
+    /// selectedItemChanged
+    /// </summary>
+    /// <param name="requestItem"></param>
+    public void selectedItemChanged(StdRequestCodeModel requestItem)
+    {
+
+        selectedItem = requestItem;
+
+        if (selectedItem.RequestName.Contains("충전"))
+        {
+            editFormModel.AccountNumber = "0";
+            editFormModel.PersonName = string.Empty;
+        }
+        else if (selectedItem.RequestName.Contains("환불"))
+        {
+            editFormModel.AccountNumber = string.Empty;
+            editFormModel.PersonName = string.Empty;
+        }
+
+
+        InvokeAsync(StateHasChanged);
+    }
+
+
+    protected override Task OnInitializedAsync()
+    {
+        // DB에서 의뢰코드 불러옴
+        requestItems = dbContext.TB_STD_REQUEST_CODE
+                                .Where(c => c.RequestName.Contains("예치금"))
+                                .ToList()
+                                .AsEnumerable();
+
+        if (requestItems.Count() > 0)
+            selectedItem = requestItems.ElementAt(0);
+
+
+        // 팝업되었을 때 각 필드 초기화
+        editFormModel.PersonName = string.Empty;
+        editFormModel.Amount = string.Empty;
+        editFormModel.AccountNumber = string.Empty;
+        editFormModel.DepositDate = DateTime.Today;
+
+        return Task.CompletedTask;
+
+    }
+
+
+    /// <summary>
+    /// 입력 폼 모델
+    /// </summary>
+    public class EditFormModel
+    {
+
+        /// <summary>
+        /// 입금일 또는 출금요청일
+        /// </summary>
+        [Required(ErrorMessage = "필수 입력값입니다.")]
+
+        public DateTime DepositDate { get; set; }
+
+
+        /// <summary>
+        /// 입금액 또는 출금요청액
+        /// </summary>
+        [Required(ErrorMessage = "필수 입력값입니다."), Range(1, int.MaxValue, ErrorMessage = "1보다 큰 값을 입력해주세요")]
+        public string Amount { get; set; }
+
+
+        /// <summary>
+        /// 입금자 또는 출금계좌성명
+        /// </summary>
+        [Required(ErrorMessage = "필수 입력값입니다.")]
+        public string PersonName { get; set; }
+
+
+        /// <summary>
+        /// 출금계좌번호
+        /// </summary>
+        [Required(ErrorMessage = "필수 입력값입니다.")]
+        public string AccountNumber { get; set; }
+
+    }
+
+
+    /// <summary>
+    /// Submit Method
+    /// </summary>
+    private async void HandleValidSubmit()
+    {
+        Dictionary<string, object> paramList = new Dictionary<string, object>();
+
+        paramList.Add("RequestCode", selectedItem.RequestCode);
+        paramList.Add("DepositDate", editFormModel.DepositDate);
+        paramList.Add("Amount", editFormModel.Amount);
+        paramList.Add("PersonName", editFormModel.PersonName);
+        paramList.Add("AccountNumber", editFormModel.AccountNumber);
+
+        paramList.Add("UserId", userId);
+
+        dialogIsOpen = !dialogIsOpen;
+        StateHasChanged();
+
+        string returnVal = await DepositService.AddRequestAsync(paramList);
+
+        // 처리 완료 후 이용자에게 알람(토스트) 처리
+        IEnumerable<string> result = returnVal.Split(",");
+        if(result.Count() == 0)
+            ShowToast(MatToastType.Danger, "", $"{selectedItem.RequestName}", "오류가 발생하였습니다. 관리자에게 문의해주세요");
+        else if (result.ElementAt(0).Equals("OK"))
+            ShowToast(MatToastType.Info, "", $"{selectedItem.RequestName}", result.ElementAt(1));
+        else if (result.ElementAt(0).Equals("NG"))
+            ShowToast(MatToastType.Danger, "", $"{selectedItem.RequestName}", result.ElementAt(1));
+
+
+
+
+    }
+    /// <summary>
+    /// Validation
+    /// </summary>
+    private void HandleInvalidSubmit()
+    {
+        Console.WriteLine("OnInvalidSubmit");
+    }
+
+
+    #region Toast
+    /// <summary>
+    /// Toast Parameters
+    /// </summary>
+    //private string _title = "예치금 충전";
+    //private string _message = "예치금 충전 신청이 성공하였습니다. 입금이 확인되면";
+    private bool _showProgressBar = true;
+    private bool _showCloseButton = true;
+    //private bool _actionOnClick = false;
+    private string _maximumOpacity = "100";
+
+    private string _showTransitionDuration = "500";
+    private string _visibleStateDuration = "7000";
+    private string _hideTransitionDuration = "500";
+
+    //private bool _requireInteraction =false;
+
+    public void ShowToast(MatToastType type, string icon = "", string title = "", string message = "")
+    {
+        Toaster.Add(message, type, title, icon, config =>
+        {
+            config.ShowCloseButton = _showCloseButton;
+            config.ShowProgressBar = _showProgressBar;
+            config.MaximumOpacity = Convert.ToInt32(_maximumOpacity);
+
+            config.ShowTransitionDuration = Convert.ToInt32(_showTransitionDuration);
+            config.VisibleStateDuration = Convert.ToInt32(_visibleStateDuration);
+            config.HideTransitionDuration = Convert.ToInt32(_hideTransitionDuration);
+
+            Toaster.Configuration.Position = (MatToastPosition)Enum.Parse(typeof(MatToastPosition), "BottomFullWidth");
+
+            //if (_actionOnClick)
+            //{
+            //    config.Onclick = toast =>
+            //    {
+            //        Console.WriteLine($"Title: \"{toast.Title}\"; message: \"{toast.Message}\"; Type: {toast.Options.Type}");
+            //        return Task.CompletedTask;
+            //    };
+            //}
+        });
+    }
+    #endregion Toast
+}

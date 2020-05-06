@@ -1,7 +1,7 @@
 ﻿@page "/fetchdata"
 
 @using ShaipAgency.Data
-@inject WeatherapplicationUserservice ForecastService
+@inject WeatherForecastService WeatherForecastService
 
 <h1>Weather forecast</h1>
 
@@ -37,10 +37,10 @@ else
 }
 
 @code {
-    private WeatherForecast[] forecasts;
+    private IEnumerable<WeatherForecast> forecasts;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        forecasts = await WeatherForecastService.GetForecastAsync();
     }
 }

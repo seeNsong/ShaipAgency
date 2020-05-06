@@ -1,0 +1,146 @@
+﻿@page "/TestPages/UsersUsingEF"
+@inject IApplicationUserRepository ApplicationUserRepository
+@inject ITestModelService TestModelServiceUsingEF
+@*DevExpress Modal 예제*@
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevExpress.Blazor
+
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+
+@if (applicationUsers == null)
+{
+    <p><em>Loding...</em></p>
+    <div class="spinner-border" />
+}
+else
+{
+    <AuthorizeView>
+        <h2> @UserManager.GetUserId(context.User)</h2>
+
+    </AuthorizeView>
+
+
+    <h3>Users by EF Core</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>UserName(C)</th>
+                <th>ShaipName</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var applicationUser in applicationUsers)
+            {
+                <tr>
+                    <td>@applicationUser.Id</td>
+                    <td>@applicationUser.UserName</td>
+                    <td>@applicationUser.ShaipName</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Using SQL Query -->
+@if (testModels[0] == null)
+{
+    <p><em>testModels Loding...</em></p>
+    <div class="spinner-border" />
+}
+else
+{
+    <hr />
+    <h3> Users By raw SQL queries</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>ApplyNo</th>
+                <th>Charge</th>
+                <th>UserId</th>
+                <th>ShaipName</th>
+                <th>CDateTime</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var testModel in testModels[0])
+            {
+                <tr>
+                    <td>@testModel.RequestNo</td>
+                    <td>@testModel.Charge</td>
+                    <td>@testModel.UserId</td>
+                    <td>@testModel.ShaipName</td>
+                    <td>@testModel.CDateTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Using Stored Procedure -->
+@if (testModels[1] == null)
+{
+    <p><em>testModels Loding...</em></p>
+    <div class="spinner-border" />
+}
+else
+{
+    <hr />
+    <h3> Users By Stored Procedure Using EF</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ApplyNo</th>
+                <th>UserId</th>
+                <th>ShaipName</th>
+                <th>Charge</th>
+                <th>CDateTime</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var testModel in testModels[1])
+            {
+                <tr>
+                    <td>@testModel.RequestNo</td>
+                    <td>@testModel.UserId</td>
+                    <td>@testModel.ShaipName</td>
+                    <td>@testModel.Charge</td>
+                    <td>@testModel.CDateTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+
+@code {
+
+    private IList<ApplicationUser> applicationUsers;
+
+    private List<TestModel>[] testModels = new List<TestModel>[2];
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //await Task.Delay(500);
+        applicationUsers = await ApplicationUserRepository.GetApplicationUsers();
+
+
+        testModels[0] = await TestModelServiceUsingEF.GetTestModelsByQueryAsync();
+        testModels[1] = await TestModelServiceUsingEF.GetTestModelsBySPAsync();
+
+    }
+
+
+}

@@ -5,20 +5,33 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
+
 @using ShaipAgency
 @using ShaipAgency.Shared
-@using ShaipAgency.Model
 
+@*Pages*@
+@using ShaipAgency.Pages.Deposit
+
+@*Data*@
 @using ShaipAgency.Data
 
+@*Model*@
+@using ShaipAgency.Model
 
 @*#region demo specific*@
 @using Demo.Blazor
 @*#endregion*@
 
+@*Nuget*@
 @using DevExpress.Blazor
+@using MatBlazor
 
 @*#region Test Model*@
 @using ShaipAgency.Model.TestModel
 @using ShaipAgency.Data.Test
 @*#endregion*@
+
+@*기준정보를 위한 모델,서비스*@
+@using ShaipAgency.Model.Standards
+@using ShaipAgency.Model.Request
+@using ShaipAgency.Data.Standards

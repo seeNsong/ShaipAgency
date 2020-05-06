@@ -1,0 +1,75 @@
+﻿@page "/Standards/RequestStatusCodeManage"
+@*@attribute [Authorize]*@
+
+@using ShaipAgency.Model.Standards
+@inject RequestStatusCodeService RequestStatusCodeService
+
+
+<h3>TB_STD_REQUEST_STATUS_CODE</h3>
+<div>
+    <p>의뢰의 상태 코드를 정의하고 관리하는 페이지</p>
+</div>
+
+@*@if (DataSource != null)
+{*@
+    <div class="row col-12">
+        @*<DxDataGrid Data="@DataSource"*@
+        <DxDataGrid DataAsync="@RequestStatusCodeService.ToList"
+                    PageSize="30"
+                    ShowFilterRow="false"
+                    RowRemovingAsync="@OnRowRemoving"
+                    RowUpdatingAsync="@OnRowUpdating"
+                    RowInsertingAsync="@OnRowInserting"
+                    InitNewRow="@OnInitNewRow"
+                    style="width:100%">
+            <DxDataGridCommandColumn Width="100px" DeleteButtonVisible="false" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusCodeModel.RequestStatusCode)" Caption="Request Status Code" Width="80px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusCodeModel.RequestStatusName)" Caption="Request Status Name" Width="150px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusCodeModel.RequestAlertPriority)" Caption="0-low/1-mid/2-high" Width="80px" />
+            <DxDataGridCheckBoxColumn Field="@nameof(StdRequestStatusCodeModel.UseYN)" Caption="UseYN" Width="50px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusCodeModel.CreationUserId)" Caption="UserId" Width="80px" />
+            <DxDataGridDateEditColumn Field="@nameof(StdRequestStatusCodeModel.CreationDateTime)" DisplayFormatString="g" EditorVisible="DefaultBoolean.False" />
+        </DxDataGrid>
+    </div>
+@*}*@
+
+
+@code {
+
+
+    //IEnumerable<StdRequestStatusCodeModel> DataSource;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    DataSource = await RequestStatusCodeService.ToList();
+    //}
+
+    #region DxDataGrid
+    async Task OnRowRemoving(StdRequestStatusCodeModel targetRow)
+    {
+        await RequestStatusCodeService.Remove(targetRow);
+    }
+    async Task OnRowUpdating(StdRequestStatusCodeModel targetRow, IDictionary<string, object> newRow)
+    {
+        await RequestStatusCodeService.Update(targetRow, newRow);
+    }
+    async Task OnRowInserting(IDictionary<string, object> newRow)
+    {
+        await RequestStatusCodeService.Add(newRow);
+    }
+    Task OnInitNewRow(IDictionary<string, object> newRow)
+    {
+
+        newRow.Add("RequestAlertPriority", 0);
+        newRow.Add("CreationUserId", 1);
+        newRow.Add("CreationDateTime", DateTime.Now);
+        newRow.Add("UseYN", true);
+
+
+        return Task.CompletedTask;
+    }
+    #endregion DxDataGrid
+
+
+}
+

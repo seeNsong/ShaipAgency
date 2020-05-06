@@ -1,13 +1,18 @@
-﻿<AuthorizeView>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+
+<AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage" target="_parent">@context.User.Identity.Name!</a>        
+        <ReqDeposit userId="@UserManager.GetUserId(context.User)" />
+        <a href="Identity/Account/Manage" target="_parent">@context.User.Identity.Name!</a>
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">로그아웃</button>
         </form>
+
     </Authorized>
     <NotAuthorized>
         <a href="Identity/Account/Register">회원가입</a>
         <a href="Identity/Account/Login">로그인</a>
     </NotAuthorized>
 </AuthorizeView>
-

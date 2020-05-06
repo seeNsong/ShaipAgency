@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using Microsoft.Data.SqlClient;         
-
+using Microsoft.Data.SqlClient;
+using System;
 
 namespace ShaipAgency.Data.Test
 {
@@ -30,7 +30,7 @@ namespace ShaipAgency.Data.Test
                 await conn.OpenAsync();
                 using (var command = conn.CreateCommand())
                 {                                        
-                    string query = "SELECT ApplyNo, ShaipName, Charge, CDateTime From UserPassbook WITH(NOLOCK)";
+                    string query = "SELECT RequestNo, UserId, Charge, CDateTime From UserPassbook WITH(NOLOCK)";
                     command.CommandText = query;
 
                     DbDataReader dataReader = await command.ExecuteReaderAsync();
@@ -39,13 +39,18 @@ namespace ShaipAgency.Data.Test
                     {
                         while (await dataReader.ReadAsync())
                         {
-                            var row = new TestModel { ApplyNo = dataReader.GetString(0), ShaipName = dataReader.GetString(1), Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) };
+                            var row = new TestModel { RequestNo = dataReader.GetString(0), UserId = dataReader.GetInt32(1), Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) };
                             testModels.Add(row);
                         }
                     }
                     dataReader.Dispose();
                 }
             }
+            catch(Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+            }
+
             finally
             {
 
@@ -67,8 +72,8 @@ namespace ShaipAgency.Data.Test
                 using (var command = conn2.CreateCommand())
                 {
                     string query = "UserPassbook_Sel_01";
-                    var param = new SqlParameter("@ShaipName", SqlDbType.NVarChar);
-                    param.Value = "김성민";
+                    var param = new SqlParameter("@UserId", SqlDbType.Int);
+                    param.Value = "1";
 
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandText = query;
@@ -82,12 +87,16 @@ namespace ShaipAgency.Data.Test
                     {
                         while (await dataReader.ReadAsync())
                         {
-                            var row = new TestModel { ApplyNo = dataReader.GetString(0), ShaipName = dataReader.GetString(1),  Charge = dataReader.GetInt32(2), CDateTime = dataReader.GetDateTime(3) };
+                            var row = new TestModel { RequestNo = dataReader.GetString(0), UserId= dataReader.GetInt32(1), ShaipName = dataReader.GetString(2),  Charge = dataReader.GetInt32(3), CDateTime = dataReader.GetDateTime(4) };
                             testModels.Add(row);
                         }
                     }
                     dataReader.Dispose();
                 }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
             }
             finally
             {

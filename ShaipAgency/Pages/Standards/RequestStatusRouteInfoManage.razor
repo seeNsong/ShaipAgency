@@ -1,0 +1,143 @@
+﻿@page "/Standards/RequestStatusRouteInfoManage"
+@*@attribute [Authorize]*@
+
+@using ShaipAgency.Model.Standards
+@inject RequestStatusRouteInfoService RequestStatusRouteInfoService
+@inject RequestCodeService RequestCodeService
+@inject RequestStatusCodeService RequestStatusCodeService
+@inject EventCodeService EventCodeService
+
+<h3>TB_STD_REQUEST_STATUS_ROUTE_INFO</h3>
+<div>
+    <p>의뢰요청에 이벤트에 따라 다음 상태로 변경해주기 위하여 테이블에 라우팅을 기록</p>
+</div>
+
+
+<div class="row col-12">
+
+
+    @*의뢰코드*@
+    <div class="col col-3">
+        <h5>의뢰코드</h5>
+        <DxDataGrid DataAsync="@RequestCodeService.ToList"
+                    PageSize="30"
+                    ShowFilterRow="false"
+                    style="width:100%">
+            <DxDataGridCommandColumn Width="100px" DeleteButtonVisible="false" />
+            <DxDataGridColumn Field="@nameof(StdRequestCodeModel.RequestCode)" Caption="의뢰코드" Width="100px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestCodeModel.RequestName)" Caption="의뢰명" Width="200px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridCheckBoxColumn Field="@nameof(StdRequestCodeModel.UseYN)" Caption="UseYN" Width="50px" AllowSort="DefaultBoolean.True" />
+        </DxDataGrid>
+    </div>
+
+    @*이벤트코드*@
+    <div class="col col-3">
+        <h5>이벤트코드</h5>
+        <DxDataGrid DataAsync="@EventCodeService.ToList"
+                    RowUpdatingAsync="@OnRowUpdatingEventCode"
+                    RowInsertingAsync="@OnRowInsertingEventCode"
+                    InitNewRow="@OnInitNewRowEventCode"
+                    PageSize="30"
+                    ShowFilterRow="false"
+                    style="width:100%">
+            <DxDataGridCommandColumn Width="100px" DeleteButtonVisible="false" />
+            <DxDataGridColumn Field="@nameof(StdEventCodeModel.EventCode)" Caption="이벤트코드" Width="80px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdEventCodeModel.EventName)" Caption="이벤트명" Width="150px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridCheckBoxColumn Field="@nameof(StdEventCodeModel.UseYN)" Caption="UseYN" Width="50px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdEventCodeModel.EventDescription)" Caption="이벤트설명" Width="80px" />
+            
+        </DxDataGrid>
+    </div>
+
+    @*상태코드*@
+    <div class="col col-3">
+        <h5>의뢰상태코드</h5>
+        <DxDataGrid DataAsync="@RequestStatusCodeService.ToList"
+                    PageSize="30"
+                    ShowFilterRow="false"
+                    style="width:100%">
+            <DxDataGridCommandColumn Width="100px" DeleteButtonVisible="false" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusCodeModel.RequestStatusCode)" Caption="의뢰상태코드" Width="80px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusCodeModel.RequestStatusName)" Caption="의뢰상태명" Width="150px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusCodeModel.RequestAlertPriority)" Caption="0-low/1-mid/2-high" Width="80px" />
+            <DxDataGridCheckBoxColumn Field="@nameof(StdRequestStatusCodeModel.UseYN)" Caption="UseYN" Width="50px" AllowSort="DefaultBoolean.True" />
+        </DxDataGrid>
+    </div>
+
+    @*상태변경 라우팅 테이블*@
+    <div class="col col-3">
+        @*<DxDataGrid Data="@DataSource"*@
+        <h5>Status Route</h5>
+        <DxDataGrid DataAsync="@RequestStatusRouteInfoService.ToList"
+                    PageSize="30"
+                    ShowFilterRow="false"
+                    RowRemovingAsync="@OnRowRemoving"
+                    RowUpdatingAsync="@OnRowUpdating"
+                    RowInsertingAsync="@OnRowInserting"
+                    InitNewRow="@OnInitNewRow"
+                    style="width:100%">
+            <DxDataGridCommandColumn Width="100px" DeleteButtonVisible="true" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusRouteInfoModel.RequestCode)" Caption="의뢰코드(키)" Width="80px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusRouteInfoModel.EventCode)" Caption="이벤트코드(키)" Width="80px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusRouteInfoModel.NextStatusCode)" Caption="다음상태코드" Width="80px" AllowSort="DefaultBoolean.True" />
+            <DxDataGridColumn Field="@nameof(StdRequestStatusRouteInfoModel.CreationUserId)" Caption="User Id" Width="80px" />
+            <DxDataGridDateEditColumn Field="@nameof(StdRequestStatusRouteInfoModel.CreationDateTime)" DisplayFormatString="g" EditorVisible="DefaultBoolean.False" />
+        </DxDataGrid>
+    </div>
+</div>
+
+@code {
+
+
+    //IEnumerable<StdRequestCodeModel> DataSource1;
+    //IEnumerable<StdRequestStatusCodeModel> DataSource2;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    DataSource1 = await RequestCodeService.ToList();
+    //    DataSource2 = await RequestStatusCodeService.ToList();
+    //}
+
+
+    #region DxDataGrid
+    async Task OnRowRemoving(StdRequestStatusRouteInfoModel targetRow)
+    {
+        await RequestStatusRouteInfoService.Remove(targetRow);
+    }
+    async Task OnRowUpdating(StdRequestStatusRouteInfoModel targetRow, IDictionary<string, object> newRow)
+    {
+        await RequestStatusRouteInfoService.Update(targetRow, newRow);
+    }
+    async Task OnRowInserting(IDictionary<string, object> newRow)
+    {
+        await RequestStatusRouteInfoService.Add(newRow);
+    }
+    Task OnInitNewRow(IDictionary<string, object> newRow)
+    {
+        newRow.Add("CreationDateTime", DateTime.Now);
+        newRow.Add("CreationUserId", 1);
+        return Task.CompletedTask;
+    }
+
+    // 이벤트코드
+
+    async Task OnRowUpdatingEventCode(StdEventCodeModel targetRow, IDictionary<string, object> newRow)
+    {
+
+        await EventCodeService.Update(targetRow, newRow);
+    }
+    async Task OnRowInsertingEventCode(IDictionary<string, object> newRow)
+    {
+        await EventCodeService.Add(newRow);
+    }
+    Task OnInitNewRowEventCode(IDictionary<string, object> newRow)
+    {
+        newRow.Add("UseYN", true);
+        return Task.CompletedTask;
+    }
+
+    #endregion DxDataGrid
+
+
+}
+

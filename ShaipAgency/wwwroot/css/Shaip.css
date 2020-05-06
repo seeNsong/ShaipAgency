@@ -1,6 +1,10 @@
 ﻿
-app{
-    font-family:"HDharmony B"  !important
+@font-face {
+    font-family: "ShaipFB";
+    src: url('font/현대하모니 B.ttf');
+}
+app {
+    font-family: "ShaipFB" !important;
 }
 
 
@@ -89,8 +93,7 @@ div.logo {
 }
 
 .sign-top-row {
-    position: sticky;
-    top: 0;
+    position: sticky;    
 }
 
 .sign-top-row > a, form {
@@ -107,3 +110,26 @@ div.logo {
 .sign-top-row.auth {
     justify-content: space-between;
 }
+
+
+/* MatBlazor*/
+.MatDialog-500px{
+    width: 500px
+}
+
+
+
+
+/* DxGrid 내 Table 테스트용*/
+.tr-show {
+    /* Never collapse the sidebar for wide screens */
+    display: table-row;
+}
+
+.tr-hide {
+    /* Never collapse the sidebar for wide screens */
+    display: none;
+}
+
+
+
