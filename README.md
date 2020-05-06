@@ -1,18 +1,75 @@
 # ShaipAgency
 개인프로젝트
+=============
 
 - Register 할 때 ShaipName 짓기 <<
 
+## 07_예치금_환불_신청_구현
+### 예치금_시스템마감_실시간계산 함수_구현
+### 예치금 환불 
+### 예치금 이용내역 구현 (팝업)
+- 조회 Stored Procedure : USP_REQ_DEPOSIT_SEL_01  (예정)
 
-## 06_에치금_디스플레이_신청_샘플페이지_구현
-### [DB Project]
-- ApplicationUser, ApplicationRole Key타입 변경 -> Int
-- Table 추가 : AspNetUsers (Same With Identity Auto Migrated Table)
-- Table Column 변경 : ApplyNo -> RequestNo / ShaipName -> UserID
-- Foreign Key 설정 : UserID -> AspNetUsers(Id)
+---------------------------------------------------------------------
+
+## 06_예치금_충전_신청_구현
+### [DB Project] 테이블추가
+- TB_STD_REQUEST_CODE
+  : 의뢰요청을 코드로 저장
+- TB_STD_REQUEST_STATUS_CODE
+  : 의뢰의 상태를 코드로 저장
+- TB_STD_REQUEST_STATUS_ROUTE_INFO
+  : 이벤트 발생에 따른 의뢰 상태 변화를 저저장
+- TB_REQ_MASTERS
+  : 의뢰 요청의 마스터 테이블
+- TB_REQ_DETAILS_DEPOSIT
+  : 의뢰 요청[예치금충전]의 세부 테이블
+- TB_REQ_TIMESTAMPS
+  : 모든 의뢰의 이벤트별 타임 스탬프
+- TB_USER_ACTIVITY
+  : 이용자의 활동내역 저장
+- TB_USER_PASSBOOK
+  : 이용자의 예치금 통장
+  
+### [DB Project] Stored Procedure 추가
+- USP_SAHIP_TEMPLATE
+  : 샤입 프로시져의 기본 뼈대
+- USP_REQ_DEPOSIT_MOD_01
+  : 예치금 충전/환불 신청에 대한 DB UPDATE가 이루어지는 액션
+- USP_EXE_TB_USER_ACTIVITY_UPDATE
+  : 이용자 활동내역 UPDATE 하는 프로시져
+- USP_EXE_USER_PASSBOOK_UPDATE
+  : 이용자 예치금 통장을 UPDATE 하는 프로시져
+
+### [DB Project] Function 추가
+- UFN_GET_REQUEST_NO
+  : 의뢰번호를 생성시키는 함수
+- UFN_GET_NEXT_STATUS
+  : 현재 의뢰번호에 발생된 이벤트에 따라 다음 상태를 리턴하는 함수
+
+### Model 객체 생성
+- REQ_MODELS => TB_REQ에 매칭
+- STD_MODELS => TB_STD에 매칭
+- USER_MODELS => TB_USER에 매칭
+
+### Data(Service) 생성
+- 폴더 Standards => 기준정보 (TB_STD 테이블의 업데이트 담당)
+- 기준정보는 Entityframework 를 통해 접근 및 갱신
+- 의뢰의 요청,접수,처리 는 Stored Procedure를 통해 처리
+
+### 예치금 충전 신청 기능 구현
+- 로그인 후 예치금 충전/환불 팝업을 통해 신청
+- 업데이트 Stored Procedure : USP_REQ_DEPOSIT_MOD_01
 
 ### [TestModel수정]
 - IEnumerable 리턴
+
+### DxGrid Customization 구현
+- TestDxGridColumnTemplate.razor
+  + 테이블 컬럼헤더 테마적용
+  + RowPreviewTemplate/NewRow/EditRow
+
+---------------------------------------------------------------------
 
 ### 06-1_MatBlazor설치
 - Nuget Package 설치 : MatBlazor
@@ -23,6 +80,8 @@
 ### Remote Db Access 세팅 
 - Azure Keyvault 셋팅
 - appsetting.json => DbMode : LocalDbConnection, RemoteDb
+
+---------------------------------------------------------------------
 
 ## 05_Database_Access_샘플페이지_작성
 - SQL Database Project 추가
