@@ -1,6 +1,4 @@
-﻿
-
--- =============================================
+﻿-- =============================================
 -- Author:		김성민
 -- Create date: 2020.05.03
 -- Description:	예치금관련 요청 처리 하는 프로시져
@@ -97,7 +95,7 @@ BEGIN
 
 
 				-- RETURN MESSAGE
-				SET	@ReturnMessage = N'의뢰등록 성공 : ' + @RequestTitle;
+				SET	@ReturnMessage = N'OK, 의뢰등록 성공 : ' + @RequestTitle;
 
 			END;
 			;
@@ -148,7 +146,7 @@ BEGIN
 
 
 				-- RETURN MESSAGE
-				SET	@ReturnMessage = N'의뢰등록 성공 : ' + @RequestTitle;
+				SET	@ReturnMessage = N'OK, 의뢰등록 성공 : ' + @RequestTitle;
 
 			END;
 		END;
@@ -183,13 +181,13 @@ BEGIN
 
 
 				-- RETURN MESSAGE
-				SET @ReturnMessage = N'의뢰번호 : '+ @RequestNo +N' 취소 성공';
+				SET @ReturnMessage = N'OK, 의뢰번호 : '+ @RequestNo +N' 취소 성공';
 
 			END;
 			ELSE
 			BEGIN
 				-- RETURN MESSAGE
-				SELECT N'의뢰취소 실패 : 취소할 수 없는 상태입니다. 관리자에게 문의해주세요. IsLocked = 1' 
+				SELECT N'NG, 의뢰취소 실패 : 취소할 수 없는 상태입니다. 관리자에게 문의해주세요. IsLocked = 1' 
 				RETURN ;
 			END
 
@@ -229,7 +227,7 @@ BEGIN
 			-- UPDATE USER_ACTIVITY	 => 필요없음
 
 			-- RETURN MESSAGE
-			SET @ReturnMessage = N'의뢰번호 : ' + @RequestNo + N' 수정을 완료하였습니다.'
+			SET @ReturnMessage = N'OK, 의뢰번호 : ' + @RequestNo + N' 수정을 완료하였습니다.'
 
 		END;
 		-- 의뢰삭제(이용자)
@@ -261,13 +259,13 @@ BEGIN
 				-- UPDATE USER_ACTIVITY	 => 필요없음
 
 				-- RETURN MESSAGE
-				SET @ReturnMessage = N'의뢰번호 : ' + @RequestNo + N' 삭제를 완료하였습니다.';
+				SET @ReturnMessage = N'OK, 의뢰번호 : ' + @RequestNo + N' 삭제를 완료하였습니다.';
 
 			END;
 			ELSE
 			BEGIN				
 				-- RETURN MESSAGE
-				SELECT N'삭제 실패 : 접수 대기인 상태에서만 삭제가 가능합니다. RequestStatusCode <> ''01''' ;
+				SELECT N'NG, 삭제 실패 : 접수 대기인 상태에서만 삭제가 가능합니다. RequestStatusCode <> ''01''' ;
 				RETURN ;
 				
 			END;
@@ -298,7 +296,7 @@ BEGIN
 
 
 			-- RETURN MESSAGE
-			SET @ReturnMessage = N'의뢰번호 : '+ @RequestNo +N' 취소 성공(샤입)';
+			SET @ReturnMessage = N'OK, 의뢰번호 : '+ @RequestNo +N' 취소 성공(샤입)';
 		END;
 		-- 의뢰접수
 		ELSE IF (@EventCode = '16' )
@@ -352,7 +350,7 @@ BEGIN
 			-- TB_USER_PASSBOOK UPDATE
 			EXEC USP_EXE_TB_USER_ACTIVITY_UPDATE  @RequestNo = @RequestNo ,@EventCode = @EventCode ,@UserId	= @UserId ,@Amount = @Amount ,@CreationDateTime	= @NowDatetime
 
-			SET	@ReturnMessage = N'예치금 충전 완료'
+			SET	@ReturnMessage = N'OK, 예치금 충전 완료'
 		END;
 		;
 
@@ -392,6 +390,9 @@ BEGIN
 				   @ErrorSeverity, -- Severity.  
 				   @ErrorState -- State.  
 				   );  
+
+
+		SELECT 'NG, 처리 중 오류가 발생하여 처리에 실패하였습니다.'
 
 	END CATCH;
 

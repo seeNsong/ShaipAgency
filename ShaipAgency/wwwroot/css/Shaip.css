@@ -116,3 +116,20 @@ div.logo {
 .MatDialog-500px{
     width: 500px
 }
+
+
+
+
+/* DxGrid 내 Table 테스트용*/
+.tr-show {
+    /* Never collapse the sidebar for wide screens */
+    display: table-row;
+}
+
+.tr-hide {
+    /* Never collapse the sidebar for wide screens */
+    display: none;
+}
+
+
+

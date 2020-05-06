@@ -1,0 +1,206 @@
+﻿@page "/TestPages/TestDxGridColumnTemplate"
+
+@inject WeatherForecastService ForecastService
+
+
+@*<style>
+    .grid-header-border-bottom-1 thead > tr > th {
+        border-bottom-width: 1px !important;
+        color : white;
+        background-color: blueviolet;
+    }
+</style>*@
+
+<div class="demo-description">
+    <h2>Data Grid - Column Types</h2>
+
+    <p>
+        This demo demonstrates the different column types supported by the DevExpress <a class="helplink" target="_blank" href="https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxDataGrid-1#columns">Data Grid</a> for Blazor.
+    </p>
+    <ul>
+        <li>
+            <p><a class="helplink" target="_blank" href="https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxDataGridCommandColumn">DxDataGridCommandColumn</a> - Displays data management commands such as New, Edit, Delete, Update, and so on.</p>
+        </li>
+        <li>
+            <p><a class="helplink" target="_blank" href="https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxDataGridDateEditColumn">DxDataGridDateEditColumn</a> (Date) - Uses a drop-down calendar control to edit column values.</p>
+        </li>
+        <li>
+            <p><a class="helplink" target="_blank" href="https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxDataGridColumn">DxDataGridColumn</a> (Summary) - Default column type that displays strings and uses a text box to edit values.</p>
+        </li>
+        <li>
+            <p><a class="helplink" target="_blank" href="https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxDataGridSpinEditColumn">DxDataGridSpinEditColumn</a> (Temp. (&#x2103;)) - Uses a spin editor with up/down buttons to edit column values.</p>
+        </li>
+        <li>
+            <p><a class="helplink" target="_blank" href="https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxDataGridComboBoxColumn-1">DxDataGridComboBoxColumn</a> (Cloudiness) - Uses a combobox control to edit column values.</p>
+        </li>
+        <li>
+            <p><a class="helplink" target="_blank" href="https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxDataGridCheckBoxColumn">DxDataGridCheckBoxColumn</a> (Precipitates) - Displays a disabled checkbox that is replaced with a combobox when users filter column values.</p>
+        </li>
+    </ul>
+    <p>
+        Click the Edit command in any row to see the integrated data editors displayed by the columns listed above.
+    </p>
+</div>
+
+
+
+@*테마는 switcher-resources 아래 테마명에서 설정 *@
+<DxDataGrid DataAsync="@ForecastService.GetForecastAsync"
+            PageSize="5"
+            ShowFilterRow="false"
+            RowRemovingAsync="@OnRowRemoving"
+            RowUpdatingAsync="@OnRowUpdating"
+            RowInsertingAsync="@OnRowInserting"
+            InitNewRow="@OnInitNewRow"
+            @ref="MyGrid"
+            @bind-SingleSelectedDataRow="@selectedForecast"            
+            CssClass="mw-1100 grid-border-0 grid-header-border-bottom-1"
+            style="width:70%; ">
+
+
+
+    <Columns>
+        @*<DxDataGridCommandColumn Width="150px"></DxDataGridCommandColumn>*@
+
+        <DxDataGridDateEditColumn Field="@nameof(WeatherForecast.Date)" DisplayFormatString="D" EditFormatString="D"></DxDataGridDateEditColumn>
+
+        <DxDataGridColumn Field="@nameof(WeatherForecast.Summary)" Caption="Summary" Width="150px"></DxDataGridColumn>
+
+        <DxDataGridSpinEditColumn Field="@nameof(WeatherForecast.TemperatureC)" Caption="@("Temp. (\x2103)")" TextAlignment="@DataGridTextAlign.Left" Width="150px"></DxDataGridSpinEditColumn>
+
+        <DxDataGridComboBoxColumn Field="@nameof(WeatherForecast.WeatherType)" Caption="Cloudiness" DataAsync="@ForecastService.GetCloudinessAsync" TextAlignment="@DataGridTextAlign.Left" Width="150px"></DxDataGridComboBoxColumn>
+
+        <DxDataGridCheckBoxColumn Field="@nameof(WeatherForecast.Precipitates)" Caption="Precipitates" Width="100px"></DxDataGridCheckBoxColumn>
+    </Columns>
+    <RowPreviewTemplate Context="ItemInfo">
+        @{
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col"  class="shaip-table-thead">#</th>
+                        <th scope="col"  class="shaip-table-thead">First</th>
+                        <th scope="col"  class="shaip-table-thead">Last</th>
+                        <th scope="col"  class="shaip-table-thead">Handle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td><button class="btn-primary" @onclick="@(() => showblock(0))">보이기</button></td>
+                    </tr>
+                    <tr class="@collapse[0]">
+                        <td colspan="4">
+                            <div>
+                                펼쳐지면서 사세보기 하는 곳입니다. 1번 버튼클릭
+                                <br /><br /><br /><br />
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td><button class="btn-primary" @onclick="@(() => showblock(1))">보이기</button></td>
+                    </tr>
+                    <tr class="@collapse[1]">
+                        <th scope="row"> 상세보기</th>
+                        <td>펼쳐지면서 사세보기 하는 곳입니다. 2번 버튼클릭</td>
+                        <td>펼쳐지면서 사세보기 하는 곳입니다. 2번 버튼클릭</td>
+                        <td>펼쳐지면서 사세보기 하는 곳입니다. 2번 버튼클릭</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td colspan="2">Larry the Bird</td>
+                        <td><button class="btn-primary" @onclick="@(() => showblock(2))">보이기</button></td>
+                    </tr>
+                    <tr class="@collapse[2]" id="3">
+                        <th scope="row">3</th>
+                        <td colspan="2">신규작성</td>
+                        <td><button class="btn-primary" @onclick="@(() => NewRow())">NewRow</button></td>
+                    </tr>
+                    <tr class="@collapse[2]" id="4">
+                        <th scope="row">3</th>
+                        <td colspan="2">업데이트</td>
+                        <td><button class="btn-primary" @onclick="@(() => EditRow(ItemInfo.DataItem))">EditRow</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </RowPreviewTemplate>
+</DxDataGrid>
+
+@*<CodeSnippet_GridColumnTypes></CodeSnippet_GridColumnTypes>*@
+
+@code {
+    async Task OnRowRemoving(WeatherForecast dataItem)
+    {
+        await ForecastService.Remove(dataItem);
+    }
+    async Task OnRowUpdating(WeatherForecast dataItem, IDictionary<string, object> newValue)
+    {
+        await ForecastService.Update(dataItem, newValue);
+    }
+    async Task OnRowInserting(IDictionary<string, object> newValue)
+    {
+        await ForecastService.Insert(newValue);
+    }
+    Task OnInitNewRow(Dictionary<string, object> values)
+    {
+        values.Add("Date", DateTime.Now);
+        values.Add("TemperatureC", 13);
+        values.Add("Summary", "Warm");
+        values.Add("WeatherType", "Sunny");
+        return Task.CompletedTask;
+    }
+
+
+    #region TEst
+
+    private int currentCount = 0;
+    private bool toggle = false;
+    private string[] collapse;
+
+
+
+    protected override Task OnInitializedAsync()
+    {
+        collapse = new string[3] { "tr-hide", "tr-hide", "tr-hide" };
+        return Task.CompletedTask;
+    }
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    private void showblock(int id)
+    {
+        collapse[id] = collapse[id].Equals("tr-hide") ? "tr-show" : "tr-hide";
+    }
+
+
+
+    DevExpress.Blazor.DxDataGrid<WeatherForecast> MyGrid;
+    WeatherForecast selectedForecast;
+
+    async Task EditRow(WeatherForecast weatherForecast)
+    {
+
+        if (weatherForecast != null)
+        {
+            await MyGrid.StartRowEdit(weatherForecast);
+        }
+    }
+
+    async Task NewRow()
+    {
+        await MyGrid.StartRowEdit(null);
+    }
+
+
+    #endregion
+}

@@ -73,7 +73,6 @@
     <Build Include="dbo\Stored Procedures\USP_REQ_DEPOSIT_MOD_01.sql" />
     <Build Include="dbo\Stored Procedures\USP_EXE_TB_USER_ACTIVITY_UPDATE.sql" />
     <Build Include="dbo\Stored Procedures\USP_EXE_USER_PASSBOOK_UPDATE.sql" />
-    <Build Include="dbo\Stored Procedures\USP_EXE_USER_PASSBOOK_UPDATE_1.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\TB_REQ_DETAILS_DEPOSIT.sql" />

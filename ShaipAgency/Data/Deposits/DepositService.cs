@@ -59,9 +59,7 @@ namespace ShaipAgency.Data.Deposits
                             // EventCode "10" = 의뢰등록
                             command.Parameters.Add(new SqlParameter("@EventCode", SqlDbType.Char));
                             command.Parameters[i].SqlValue = "10";
-
                             // UserId string값으로 받아와서 여기서 int로 넘기는거 오류 없는지 확인 
-
                         }
 
                         using (SqlDataReader sqlDataReader = await command.ExecuteReaderAsync())
