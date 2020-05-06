@@ -11,6 +11,26 @@
 
 
 ## 08_요청관리_처리_페이지_구현
+예치금환불신청 시 현재 예치금과 비교 
+예치금 중간 정산 화면추가(Admin)
+예치금 실시간 조회 function 추가
+예치금 사용현황 조회(팝업)
+
+
+Db Project Update ->
+USP :
+	[USP_EXE_SYS_CLOSING]
+Table : 
+	SYS_USER_DEPOSIT_CLOSING
+Function : 
+	[UFN_GET_USER_DEPOST]
+
+
+DB : USP_REQ_MANAGEMENT_SEL_01
+Page : RequestManagement.razor
+Model : RequestMasterModel
+Service : RequestManageService.cs
+
 
 
 
