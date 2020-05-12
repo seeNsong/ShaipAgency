@@ -26,13 +26,17 @@ Function :
 	[UFN_GET_USER_DEPOST]
 
 
+
+### TABLE 추가 
+- TB_STD_REQUEST_STATUS_OWNED_EVENT 추가 
+
 DB : USP_REQ_MANAGEMENT_SEL_01
 Page : RequestManagement.razor
 Model : RequestMasterModel
 Service : RequestManageService.cs
 
 
-
+----------------------------------------------------------------------
 
 ## 07_예치금_환불_신청_구현
 
